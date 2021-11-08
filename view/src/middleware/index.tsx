@@ -1,12 +1,15 @@
-import React, { ReactNode } from 'react';
-type Props = {};
+import React from 'react';
+import { AuthProvider } from './Auth';
 /**
  * Middleware Provision Entry Point
  * @param props child react node
  * @returns ReactNode
  */
-export const MiddlewareProvider = ( props: { children: ReactNode } ) => {
-    return [
-        props.children,
-    ].reduce( ( P: ReactNode, C: ReactNode ) => ( <C children={ P } /> ), );
-};
+export class MiddlewareProvider extends React.Component<{}, {}> {
+    public render(  ) {
+        return ( [
+            this.props.children,
+            AuthProvider,
+        ] as React.ReactNode[] ).reduce( ( P, C ) => ( <C children={ P } /> ), );
+    }
+}

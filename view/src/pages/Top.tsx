@@ -1,9 +1,9 @@
-import { Main } from '@/components/layouts/Main';
 import React from 'react';
-export const Top: React.FC<{}> = ( {  } ) => {
+import { Main } from '@/components/layouts/Main';
+export const Top: React.VFC<{}> = ( {  } ) => {
     return (
         <Main>
-            top
+            <p>top</p>
         </Main>
     );
 };

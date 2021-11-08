@@ -1,9 +1,9 @@
 import React from 'react';
-import { Main } from '@/components/layouts/Main';
-export const Top: React.FC<{}> = ( {  } ) => {
-    return (
-        <Main>
-            redirect to login or Dashboard
-        </Main>
-    );
+import { Redirect } from 'react-router-dom';
+export const Top: React.VFC<{}> = ( {  } ) => {
+    if ( import.meta.env.MODE === 'development' ) {
+        return <Redirect to={ `/admin/documents` } />;
+    } else {
+        return <Redirect to={ `/admin/login` } />;
+    }
 };
