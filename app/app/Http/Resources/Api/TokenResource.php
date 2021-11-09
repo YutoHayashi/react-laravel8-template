@@ -6,6 +6,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 class TokenResource extends JsonResource
 {
+
     /**
      * Transform the resource into an array.
      *
@@ -25,4 +26,5 @@ class TokenResource extends JsonResource
             '_embedded' => new TokenResource( $request ),
         ] );
     }
+
 }
