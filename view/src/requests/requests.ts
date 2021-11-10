@@ -3,8 +3,9 @@ import axios from 'axios';
  * Axios instance.
  */
 export const instance = axios.create( {
-    baseURL: `${ import.meta.env.VITE_SERVER_NAME }`,
+    baseURL: `${ import.meta.env.VITE_SERVER_NAME }/api`,
     responseType: 'json',
+    withCredentials: true,
 } );
 instance.interceptors.response.use(
     res => Promise.resolve( res ),
@@ -12,3 +13,4 @@ instance.interceptors.response.use(
         return Promise.reject( error.response );
     }
 );
+instance.defaults.headers.common[ 'X-Requested-With' ] = 'XMLHttpRequest';

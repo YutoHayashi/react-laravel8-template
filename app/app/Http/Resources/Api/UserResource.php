@@ -12,13 +12,15 @@ class UserResource extends JsonResource
      * @param  \Illuminate\Http\Request  $request
      * @return array|\Illuminate\Contracts\Support\Arrayable|\JsonSerializable
      */
-    public function toArray($request) {
-        return parent::toArray( $request );
+    public function toArray( $request ) {
+        return [
+            'user' => parent::toArray( $request ),
+        ];
     }
 
-    public static function create( $request ) {
+    public static function create( \App\Models\User $user ) {
         return ResponseBody::create( [
-            '_embedded' => new UserResource( $request ),
+            '_embedded' => new UserResource( $user ),
         ] );
     }
 }

@@ -13,12 +13,19 @@ class User extends Authenticatable implements JWTSubject
     use HasFactory, Notifiable;
 
     /**
+     * The database table used by the model.
+     * 
+     * @var string
+     */
+    protected $table = 'users';
+
+    /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        'name', 'email', 'password', 'is_admin',
     ];
 
     /**
@@ -51,5 +58,20 @@ class User extends Authenticatable implements JWTSubject
      */
     public function getJWTCustomClaims(  ) {
         return [  ];
+    }
+
+    public function setPasswordAttribute( $unhashed ) {
+        $this->attributes[ 'password' ] = \Illuminate\Support\Facades\Hash::make( $unhashed );
+    }
+
+    /**
+     * Create admin user.
+     */
+    public static function createAdmin( $payload ) {
+        return User::create(
+            $payload + [
+                'is_admin' => 1,
+            ]
+        );
     }
 }
