@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Http\Resources\Api;
+namespace App\Http\Resources\Api\Auth;
 
 use Illuminate\Http\Resources\Json\ResourceCollection;
 
 class UserResourceCollection extends ResourceCollection
 {
+
     /**
      * Transform the resource collection into an array.
      *
@@ -20,9 +21,10 @@ class UserResourceCollection extends ResourceCollection
         ];
     }
 
-    public static function create( Collection $users ) {
-        return ResponseBody::create( [
+    public static function create( \Illuminate\Database\Eloquent\Collection $users ) {
+        return \App\Http\Resources\Api\ResponseBody::create( [
             '_embedded' => new UserResourceCollection( $users ),
         ] );
     }
+
 }

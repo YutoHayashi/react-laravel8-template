@@ -1,10 +1,8 @@
 import React from 'react';
-import { Redirect } from 'react-router';
-import { Main } from '@/components/layouts/Main';
+import { Admin } from '@/components/layouts/Admin';
 export const Top: React.VFC<{}> = ( {  } ) => {
     return (
-        <Main>
-            <p>top</p>
-        </Main>
+        <Admin>
+        </Admin>
     );
 };

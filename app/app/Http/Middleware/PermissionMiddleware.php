@@ -15,10 +15,22 @@ class PermissionMiddleware
      * @param  \Closure  $next
      * @return mixed
      */
-    public function handle( Request $request, Closure $next )
+    public function handle( Request $request, Closure $next, $permission = null )
     {
         if ( auth(  )->guest(  ) ) {
             throw UnauthorizedException::notLoggedIn(  );
         }
+        if ( !is_null( $permission ) ) {
+            $permissions = is_array( $permission ) ? $permission : explode( '|', $permission );
+        } else {
+            $permission = $request->route(  )->getName(  );
+            $permissions = array( $permission );
+        }
+        foreach( $permissions as $p ) {
+            if ( auth(  )->user(  )->can( $permission ) ) {
+                return $next( $request );
+            }
+        }
+        throw UnauthorizedException::forPermissions( $permissions );
     }
 }

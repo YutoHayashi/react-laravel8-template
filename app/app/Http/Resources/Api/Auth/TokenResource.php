@@ -1,11 +1,10 @@
 <?php
 
-namespace App\Http\Resources\Api;
+namespace App\Http\Resources\Api\Auth;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class TokenResource extends JsonResource
-{
+class TokenResource extends JsonResource {
 
     /**
      * Transform the resource into an array.
@@ -22,9 +21,8 @@ class TokenResource extends JsonResource
     }
 
     public static function create( $request ) {
-        return ResponseBody::create( [
+        return \App\Http\Resources\Api\ResponseBody::create( [
             '_embedded' => new TokenResource( $request ),
         ] );
     }
-
 }

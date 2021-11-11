@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Requests\Api\Auth;
+namespace App\Http\Requests\Api\Role;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
-class LoginRequest extends FormRequest
+class UpdateRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -14,7 +14,7 @@ class LoginRequest extends FormRequest
      * @return bool
      */
     public function authorize(  ) {
-        return true;
+        return false;
     }
 
     /**
@@ -24,20 +24,15 @@ class LoginRequest extends FormRequest
      */
     public function rules(  ) {
         return [
-            'email' => [ 'required', 'max:255', 'email', ],
-            'password' => [ 'required', 'string', 'min:8', 'max:50', ],
+            'name' => [ 'required', ],
+            'permission' => [ 'required', ],
         ];
     }
 
     public function messages(  ) {
         return [
-            'email.required' => '',
-            'email.max' => '',
-            'email.email' => '',
-            'password.required' => '',
-            'password.string' => '',
-            'password.min' => '',
-            'password.max' => '',
+            'name.required' => '',
+            'permission.required' => '',
         ];
     }
 

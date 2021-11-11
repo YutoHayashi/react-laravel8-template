@@ -1,5 +1,5 @@
 import React from 'react';
-import { User, Meta as UserMeta } from '@/models/User';
+import { User } from '@/models/User';
 import { Permissions } from '@/permissions/Permissions';
 import { login as loginRequest } from '@/requests/Auth';
 type Props = {};
@@ -9,6 +9,7 @@ type States = {
     me: User;
     login: typeof login;
     logout: typeof logout;
+    check: typeof check;
 };
 let state: States;
 let setState: React.Dispatch<React.SetStateAction<States>>;
@@ -49,7 +50,18 @@ const logout: (  ) => Promise<void> = (  ) => {
         }
     } );
 };
-const init: States = { isAuthenticated: false, token: '', me: User.plane(  ), login, logout, };
+/**
+ * Auth check handler.
+ */
+const check = (  ) => {
+    if ( !state.isAuthenticated ) {
+        const token = localStorage.getItem( STORAGE_NAME );
+        if ( token ) {
+            setState( { ...state, ...{ token, isAuthenticated: true, } } );
+        }
+    }
+};
+const init: States = { isAuthenticated: false, token: '', me: User.plane(  ), login, logout, check, };
 export const AuthContext = React.createContext<States>( init );
 /**
  * Provide authentication middleware.
@@ -58,6 +70,7 @@ export const AuthContext = React.createContext<States>( init );
  */
 export const AuthProvider: React.FC<Props> = ( { children } ) => {
     [ state, setState ] = React.useState<States>( init );
+    React.useEffect( check );
     return <AuthContext.Provider value={ state } { ...{ children, } } />;
 };
 /**
@@ -93,6 +106,6 @@ export const WithPermission: React.FC<{ perms: Permissions[], children: ( args: 
  * @param param0 args
  * @returns WithoutAuthentication
  */
-export const WithoutAuthentication: React.FC<{ children: ( args: Pick<States, 'login'> ) => React.ReactNode }> = ( { children } ) => {
-    return <AuthManager children={ ( { login } ) => children( { login } ) } />;
+export const WithoutAuthentication: React.FC<{ children: ( args: Pick<States, 'login' | 'check' | 'isAuthenticated'> ) => React.ReactNode }> = ( { children } ) => {
+    return <AuthManager children={ ( { login, check, isAuthenticated } ) => children( { login, check, isAuthenticated } ) } />;
 };

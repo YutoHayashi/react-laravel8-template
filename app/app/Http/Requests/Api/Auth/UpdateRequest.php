@@ -13,8 +13,7 @@ class UpdateRequest extends FormRequest
      *
      * @return bool
      */
-    public function authorize(  )
-    {
+    public function authorize(  ) {
         return true;
     }
 
@@ -23,8 +22,7 @@ class UpdateRequest extends FormRequest
      *
      * @return array
      */
-    public function rules(  )
-    {
+    public function rules(  ) {
         return [
             'name' => [ 'string', 'max:50', 'min:4', ],
             'email' => [ 'email', 'unique:users,email,'.$this->id, 'max:255', ],
