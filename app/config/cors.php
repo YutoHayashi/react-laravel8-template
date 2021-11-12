@@ -17,15 +17,15 @@ return [
 
     'paths' => [ 'api/*' ],
 
-    'allowed_methods' => [ 'GET', 'POST', 'PUT', 'DELETE', 'OPTIONS' ],
+    'allowed_methods' => [ '*' ],
 
     'allowed_origins' => [ 'http://localhost:8000' ],
 
-    'allowed_origins_patterns' => [],
+    'allowed_origins_patterns' => [  ],
 
-    'allowed_headers' => [ 'Accept', 'X-Requested-With', 'Origin', 'Content-Type' ],
+    'allowed_headers' => [ 'Accept', 'X-Requested-With', 'Origin', 'Content-Type', 'Authorization', ],
 
-    'exposed_headers' => [],
+    'exposed_headers' => [  ],
 
     'max_age' => 0,
 

@@ -14,3 +14,7 @@ instance.interceptors.response.use(
     }
 );
 instance.defaults.headers.common[ 'X-Requested-With' ] = 'XMLHttpRequest';
+export const Credentials = ( args: { token: string } ) => ( {
+    'Authorization': args.token,
+    'Content-Type': 'application/json' as const,
+} );

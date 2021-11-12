@@ -1,7 +1,7 @@
 import React from 'react';
 import { User } from '@/models/User';
 import { Permissions } from '@/permissions/Permissions';
-import { login as loginRequest } from '@/requests/Auth';
+import { login as loginRequest, logout as logoutRequest } from '@/requests/Auth';
 type Props = {};
 type States = {
     isAuthenticated: boolean;
@@ -39,16 +39,11 @@ const login: ( params: Parameters<typeof loginRequest>[ 0 ] ) => Promise<void> =
  * ```
  */
 const logout: (  ) => Promise<void> = (  ) => {
-    return new Promise( ( resolve, reject ) => {
-        try {
+    return logoutRequest( { token: state.token } )
+        .then( (  ) => {
             setState( { ...state, ...{ token: '', isAuthenticated: false, } } );
             localStorage.removeItem( STORAGE_NAME );
-        } catch( e ) {
-            reject( e );
-        } finally {
-            resolve(  );
-        }
-    } );
+        } );
 };
 /**
  * Auth check handler.

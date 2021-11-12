@@ -67,10 +67,17 @@ class AuthController extends Controller {
      * @return Response
      */
     public function logout(  ) {
-        auth(  )->logout(  );
-        return ResponseBody::create( [
-            'message' => [ 'Successfully logged out.' ],
-        ] );
+        try {
+            auth(  )->logout(  );
+            return ResponseBody::create( [
+                'messages' => [ 'Successfully logged out.' ],
+            ] );
+        } catch( \Exception $e ) {
+            return ResponseBody::create( [
+                'code' => 400,
+                'errors' => [ $e->getMessage(  ), ],
+            ] );
+        }
     }
 
 }

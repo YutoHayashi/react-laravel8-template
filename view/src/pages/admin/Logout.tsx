@@ -1,21 +1,16 @@
 import React from 'react';
 import { Redirect } from 'react-router';
-import { WithAuthentication, WithoutAuthentication } from '@/middleware/Auth';
+import { AuthManager } from '@/middleware/Auth';
 export const Logout: React.VFC<{}> = ( {  } ) => {
     return (
-        <WithoutAuthentication>
-            { ( { isAuthenticated } ) => {
+        <AuthManager>
+            { ( { isAuthenticated, logout } ) => {
                 if ( isAuthenticated ) {
-                    return (
-                        <WithAuthentication>
-                            { ( { logout } ) => {
-                                logout(  );
-                                return <Redirect to={ `/admin/login` } />
-                            } }
-                        </WithAuthentication>
-                    );
-                } else return <Redirect to={ `/admin/login` } />;
+                    logout(  );
+                    return <Redirect to={ `/admin/login` } />;
+                }
+                return <Redirect to={ `/admiin/login` } />;
             } }
-        </WithoutAuthentication>
+        </AuthManager>
     );
 };

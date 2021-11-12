@@ -1,8 +1,8 @@
-import { instance } from './requests';
+import { instance, Credentials } from './requests';
 import { Meta as UserMeta } from '@/models/User';
 import { ResponseBody, TokenResource } from '@/responses/types';
 /**
- * Send a login request and receive a JSON Web Token.
+ * Login
  * @param params User's email address and password
  * @returns JSON Web Token
  * @example
@@ -23,4 +23,62 @@ export const login: ( params: Pick<UserMeta, 'email'> & { password: string; } ) 
                 token: `${ type } ${ token }`,
             };
         } );
+};
+/**
+ * Get me
+ * @param param0 Json Web Token
+ * @returns User
+ */
+export const me: ( params: { token: string } ) => Promise<Pick<UserMeta, 'id' | 'email' | 'name' | 'is_admin' | 'is_active'>> = ( { token } ) => {
+    return instance.get<ResponseBody<{ user: Pick<UserMeta, 'id' | 'email' | 'name' | 'is_admin' | 'is_active'>; }>>(
+        '/me',
+        {
+            headers: {
+                ...Credentials( { token, } ),
+            },
+        },
+    )
+        .then( response => response.data.data._embedded.user );
+};
+/**
+ * Refresh Token
+ * @param param0 Json Web Token
+ * @returns TokenResource
+ */
+export const refresh: ( params: { token: string } ) => Promise<{ token: string }> = ( { token } ) => {
+    return instance.get<ResponseBody<TokenResource>>(
+        '/refresh',
+        {
+            headers: {
+                ...Credentials( { token, } ),
+            },
+        },
+    )
+        .then( response => {
+            const { token, type } = response.data.data._embedded;
+            return {
+                token: `${ type } ${ token }`,
+            };
+        } );
+}
+/**
+ * Logout
+ * @param param0 Json Web Token
+ * @returns { Promise<void> }
+ * @example
+ * ```ts
+ * logout( { token } )
+ * ```
+ */
+export const logout: ( params: { token: string; } ) => Promise<void> = ( { token } ) => {
+    return instance.post<ResponseBody>(
+        '/logout',
+        undefined,
+        {
+            headers: {
+                ...Credentials( { token } ),
+            },
+        },
+    )
+        .then( response => undefined );
 };
