@@ -7,17 +7,21 @@ export type Meta = {
     is_admin: boolean;
     is_active: boolean;
 };
-export interface User {
-    meta: Meta;
+export interface User extends Models<Meta> {
     hasPerm: ( perms: Permissions[] ) => boolean;
 }
 /**
  * User model
  * @param meta User data
  */
-export const User = class extends Models implements User {
+export const User = class extends Models<Meta> implements User {
+    public id?: number;
+    public email?: string;
+    public name?: string;
+    public is_admin?: boolean;
+    public is_active?: boolean;
     /**
-     * Generate a user with no information.
+     * Generate a user with no data
      * @returns User
      */
     public static plane(  ) {
@@ -27,8 +31,8 @@ export const User = class extends Models implements User {
         return false;
     }
     public constructor(
-        public meta: Meta
+        public init?: Partial<Meta>,
     ) {
         super(  );
     }
-}
+};

@@ -13,7 +13,7 @@
     ] ) }}
         {{ Form::hidden( 'is_admin', true ) }}
         <ul>
-        @foreach( $errors->all(  ) ?? @$errors ?? [  ] as $e )
+        @foreach( @$errors->all(  ) ?? @$errors ?? [  ] as $e )
             <li>{{ $e }}</li>
         @endforeach
         </ul>

@@ -1,13 +1,14 @@
 import { instance, Credentials } from './requests';
-import { Meta as PermissionMeta } from '@/models/Permission';
+import { Permission, Meta } from '@/models/Permission';
 import { ResponseBody } from '@/responses/types';
 /**
  * Get permissions
  * @param param0 Json Web Token
  * @returns permissions
  */
-export const index: ( params: { token: string } ) => Promise<Array<PermissionMeta>> = ( { token } ) => {
-    return instance.get<ResponseBody<{ permissions: Array<PermissionMeta> }>>(
+export const index: ( params: { token: string } ) => Promise<Array<Permission>> =
+( { token } ) => {
+    return instance.get<ResponseBody<{ permissions: Array<Meta> }>>(
         '/permissions',
         {
             headers: {
@@ -15,18 +16,19 @@ export const index: ( params: { token: string } ) => Promise<Array<PermissionMet
             },
         },
     )
-        .then( response => response.data.data._embedded.permissions );
+        .then( response => response.data.data._embedded.permissions.map( permission => new Permission( permission ) ) );
 };
 /**
  * Save permission
  * @param params Permission name and JWT
  * @returns New permission
  */
-export const save: ( params: Pick<PermissionMeta, 'name'> & { token: string; } ) => Promise<PermissionMeta> = params => {
-    const { token } = params;
+export const save: ( permission: Permission, token: string ) => Promise<Permission> =
+( permission, token ) => {
     const data = new FormData(  );
-    ( Object.keys( params ) as ( keyof typeof params )[] ).forEach( k => data.append( k, params[ k ] ) );
-    return instance.post<ResponseBody<{ permission: PermissionMeta; }>>(
+    const params = permission.parameters<Meta>( [ 'id', 'name', 'guard_name' ] );
+    ( Object.keys( params ) as ( keyof typeof params )[] ).forEach( k => data.append( `${ k }`, `${ params[ k ] }` ) );
+    return instance.post<ResponseBody<{ permission: Meta; }>>(
         '/permissions',
         data,
         {
@@ -35,19 +37,20 @@ export const save: ( params: Pick<PermissionMeta, 'name'> & { token: string; } )
             },
         },
     )
-        .then( response => response.data.data._embedded.permission );
+        .then( response => new Permission( response.data.data._embedded.permission ) );
 };
 /**
  * Update permission
  * @param params Permission parameters and JWT
  * @returns Updated permission
  */
-export const update: ( params: Partial<Pick<PermissionMeta, 'id' | 'name'>> & { token : string; } ) => Promise<PermissionMeta> = params => {
-    const { token, id } = params;
+export const update: ( permission: Permission, token : string ) => Promise<Permission> =
+( permission, token ) => {
     const data = new FormData(  );
-    ( Object.keys( params ) as ( keyof typeof params )[] ).forEach( k => data.append( k, String( params[ k ] ) ) );
-    return instance.put<ResponseBody<{ permission: PermissionMeta; }>>(
-        `/permissions/${ id }`,
+    const params = permission.parameters<Meta>( [ 'id', 'name', 'guard_name' ] );
+    ( Object.keys( params ) as ( keyof typeof params )[] ).forEach( k => data.append( `${ k }`, `${ params[ k ] }` ) );
+    return instance.put<ResponseBody<{ permission: Meta; }>>(
+        `/permissions/${ params.id }`,
         data,
         {
             headers: {
@@ -55,15 +58,16 @@ export const update: ( params: Partial<Pick<PermissionMeta, 'id' | 'name'>> & { 
             },
         },
     )
-        .then( response => response.data.data._embedded.permission );
+        .then( response => new Permission( response.data.data._embedded.permission ) );
 };
 /**
  * Destroy permission
  * @param params Permission's id and JWT
  * @returns nothing
  */
-export const destroy: ( params: Pick<PermissionMeta, 'id'> & { token: string; } ) => Promise<void> = params => {
-    const { token ,id } = params;
+export const destroy: ( params: Permission & { token: string; } ) => Promise<void> =
+params => {
+    const { token, id } = params;
     return instance.delete<ResponseBody>(
         `/permissions/${ id }`,
         {

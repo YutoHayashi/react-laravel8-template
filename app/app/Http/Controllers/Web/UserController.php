@@ -8,16 +8,15 @@ use \App\Models\User;
 
 class UserController extends Controller {
 
-    public function create( Request $request ) {
+    public function create(  ) {
         return view( 'user.form' );
     }
 
     public function save( \App\Http\Requests\Web\Auth\SaveRequest $request ) {
         $payload = $request->validated(  );
         try {
-            return view( 'user.form', [
-                'user' => User::createAdmin( $payload ),
-            ] );
+            User::createAdmin( $payload );
+            return redirect(  )->route( 'admin.create' );
         } catch( \Exception $e ) {
             return view( 'user.form', [
                 'errors' => [ $e->getMessage(  ) ],

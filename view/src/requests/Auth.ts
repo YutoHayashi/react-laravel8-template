@@ -29,7 +29,7 @@ export const login: ( params: Pick<UserMeta, 'email'> & { password: string; } ) 
  * @param param0 Json Web Token
  * @returns User
  */
-export const me: ( params: { token: string } ) => Promise<Pick<UserMeta, 'id' | 'email' | 'name' | 'is_admin' | 'is_active'>> = ( { token } ) => {
+export const me: ( params: { token: string } ) => Promise<UserMeta> = ( { token } ) => {
     return instance.get<ResponseBody<{ user: Pick<UserMeta, 'id' | 'email' | 'name' | 'is_admin' | 'is_active'>; }>>(
         '/me',
         {

@@ -13,9 +13,9 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::group( [
-    'middleware' => [ 'permission', ],
-], function(  ) {
+// Route::group( [
+//     'middleware' => [ 'permission', ],
+// ], function(  ) {
     Route::get( '/admin/register', [ App\Http\Controllers\Web\UserController::class, 'create' ] )->name( 'admin.create' );
     Route::post( '/admin/save', [ App\Http\Controllers\Web\UserController::class, 'save' ] )->name( 'admin.save' );
-} );
+// } );

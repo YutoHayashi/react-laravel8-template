@@ -1,7 +1,7 @@
 import React from 'react';
 import { User } from '@/models/User';
 import { Permissions } from '@/permissions/Permissions';
-import { login as loginRequest, logout as logoutRequest } from '@/requests/Auth';
+import { login as loginRequest, logout as logoutRequest, me as meRequest } from '@/requests/Auth';
 type Props = {};
 type States = {
     isAuthenticated: boolean;
@@ -28,7 +28,17 @@ const login: ( params: Parameters<typeof loginRequest>[ 0 ] ) => Promise<void> =
         .then( ( { token } ) => {
             setState( { ...state, ...{ token, isAuthenticated: true, } } );
             localStorage.setItem( STORAGE_NAME, token );
+            me( { token } );
         } );
+};
+/**
+ * get me
+ * @param param0 Json Web Token
+ * @returns 
+ */
+const me: ( params: { token: string; } ) => Promise<void> = ( { token } ) => {
+    return meRequest( { token } )
+        .then( meta => setState( { ...state, ...{ me: new User( meta ) } } ) );
 };
 /**
  * Auth logout handler.
@@ -41,8 +51,8 @@ const login: ( params: Parameters<typeof loginRequest>[ 0 ] ) => Promise<void> =
 const logout: (  ) => Promise<void> = (  ) => {
     return logoutRequest( { token: state.token } )
         .then( (  ) => {
-            setState( { ...state, ...{ token: '', isAuthenticated: false, } } );
             localStorage.removeItem( STORAGE_NAME );
+            setState( { ...state, ...{ token: '', isAuthenticated: false, } } );
         } );
 };
 /**
@@ -53,6 +63,7 @@ const check = (  ) => {
         const token = localStorage.getItem( STORAGE_NAME );
         if ( token ) {
             setState( { ...state, ...{ token, isAuthenticated: true, } } );
+            me( { token } );
         }
     }
 };
@@ -73,7 +84,11 @@ export const AuthProvider: React.FC<Props> = ( { children } ) => {
  * @param param0 Child react node
  * @returns AuthManager
  */
-export const AuthManager = AuthContext.Consumer;
+export const AuthManager: React.FC<{ children: ( args: States ) => React.ReactNode }> = ( { children } ) => {
+    return <AuthContext.Consumer>
+        { states => children( states ) }
+    </AuthContext.Consumer>;
+};
 /**
  * Show content only to authenticated users.
  * @param param0 args

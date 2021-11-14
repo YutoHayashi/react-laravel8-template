@@ -4,16 +4,21 @@ export type Meta = {
     name: string;
     guard_name: string;
 };
-export interface Role {
-    meta: Meta;
-}
-export const Role = class extends Models implements Role {
+export interface Role extends Models<Meta> {}
+export const Role = class extends Models<Meta> implements Role {
+    public id?: number;
+    public name?: string;
+    public guard_name?: string;
+    /**
+     * Generate a role with no data
+     * @returns Role
+     */
     public static plane(  ) {
         return new Role( { id: 0, name: '', guard_name: '', } );
     }
     public constructor(
-        public meta: Meta
+        public init?: Partial<Meta>,
     ) {
         super(  );
     }
-}
+};

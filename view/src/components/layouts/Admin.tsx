@@ -3,8 +3,8 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 export const Admin: React.FC<{}> = ( { children } ) => {
     return (
-        <main className='h-screen w-full text-gray-600 block md:grid grid-cols-2 px-5 md:px-20' style={ { backgroundColor: '#F6F6F6', } }>
-            <div className='h-full hidden md:flex items-center justify-center flex-col px-10'>
+        <main className='h-screen w-full text-gray-600 block lg:grid grid-cols-2 px-5 sm:px-10 md:px-20' style={ { backgroundColor: '#F6F6F6', } }>
+            <div className='h-full hidden lg:flex items-center justify-center flex-col px-10'>
                 <div className='mb-10'>
                     <h1 className='font-bold text-3xl text-gray-600 text-center w-full tracking-wide'>React-Laravel8-Template</h1>
                     <a href='https://github.com/YutoHayashi/react-laravel8-template' target='_blank' className='mt-4 text-blue-500 hover:text-blue-400 underline'>https://github.com/YutoHayashi/react-laravel8-template</a>
