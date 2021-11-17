@@ -38,7 +38,7 @@ const login: ( params: Parameters<typeof loginRequest>[ 0 ] ) => Promise<void> =
  */
 const me: ( params: { token: string; } ) => Promise<void> = ( { token } ) => {
     return meRequest( { token } )
-        .then( meta => setState( { ...state, ...{ me: new User( meta ) } } ) );
+        .then( me => setState( { ...state, ...{ me, } } ) );
 };
 /**
  * Auth logout handler.
@@ -49,10 +49,15 @@ const me: ( params: { token: string; } ) => Promise<void> = ( { token } ) => {
  * ```
  */
 const logout: (  ) => Promise<void> = (  ) => {
+    const resetState = (  ) => {
+        localStorage.removeItem( STORAGE_NAME );
+        setState( { ...state, ...{ token: '', isAuthenticated: false, }, } );
+    };
     return logoutRequest( { token: state.token } )
-        .then( (  ) => {
-            localStorage.removeItem( STORAGE_NAME );
-            setState( { ...state, ...{ token: '', isAuthenticated: false, } } );
+        .then( resetState )
+        .catch( e => {
+            resetState(  );
+            throw e;
         } );
 };
 /**
@@ -94,9 +99,9 @@ export const AuthManager: React.FC<{ children: ( args: States ) => React.ReactNo
  * @param param0 args
  * @returns WithAuthentication
  */
-export const WithAuthentication: React.FC<{ children: ( args: Pick<States, 'logout'> ) => React.ReactNode }> = ( { children } ) => {
-    return <AuthManager children={ ( { isAuthenticated, logout } ) => {
-        if ( isAuthenticated ) return children( { logout } );
+export const WithAuthentication: React.FC<{ children: ( args: Pick<States, 'logout' | 'token'> ) => React.ReactNode }> = ( { children } ) => {
+    return <AuthManager children={ ( { isAuthenticated, logout, token } ) => {
+        if ( isAuthenticated ) return children( { logout, token } );
         return null;
     } } />;
 };

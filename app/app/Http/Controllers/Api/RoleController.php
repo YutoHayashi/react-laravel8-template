@@ -85,4 +85,13 @@ class RoleController extends Controller {
         }
     }
 
+    /**
+     * Retrieve role
+     * @param Role $role - Role model
+     * @return Response 
+     */
+    public function show( Role $role ) {
+        return RoleResource::create( $role );
+    }
+
 }

@@ -2,7 +2,7 @@ export class Models<M extends {
     [ x: string ]: any;
 }> {
 
-    public parameters<T extends M>( metaNames: ( keyof T )[] ) {
+    public parameters<T>( metaNames: ( keyof T )[] ) {
         let _parameters: {
             [ K in keyof T ]?: T[ K ];
         } = {  };

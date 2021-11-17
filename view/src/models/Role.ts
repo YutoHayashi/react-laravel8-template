@@ -5,7 +5,7 @@ export type Meta = {
     guard_name: string;
 };
 export interface Role extends Models<Meta> {}
-export const Role = class extends Models<Meta> implements Role {
+export class Role extends Models<Meta> implements Role {
     public id?: number;
     public name?: string;
     public guard_name?: string;
@@ -17,7 +17,7 @@ export const Role = class extends Models<Meta> implements Role {
         return new Role( { id: 0, name: '', guard_name: '', } );
     }
     public constructor(
-        public init?: Partial<Meta>,
+        public init: Meta,
     ) {
         super(  );
     }

@@ -3,8 +3,9 @@
   "version": "0.0.0",
   "scripts": {
     "dev": "vite",
-    "build": "tsc && vite build",
-    "serve": "vite preview"
+    "build": "vite build",
+    "serve": "vite preview",
+    "test": "tsc"
   },
   "dependencies": {
     "axios": "^0.24.0",

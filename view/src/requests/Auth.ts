@@ -1,5 +1,5 @@
 import { instance, Credentials } from './requests';
-import { Meta as UserMeta } from '@/models/User';
+import { User, Meta as UserMeta } from '@/models/User';
 import { ResponseBody, TokenResource } from '@/responses/types';
 /**
  * Login
@@ -29,8 +29,8 @@ export const login: ( params: Pick<UserMeta, 'email'> & { password: string; } ) 
  * @param param0 Json Web Token
  * @returns User
  */
-export const me: ( params: { token: string } ) => Promise<UserMeta> = ( { token } ) => {
-    return instance.get<ResponseBody<{ user: Pick<UserMeta, 'id' | 'email' | 'name' | 'is_admin' | 'is_active'>; }>>(
+export const me: ( params: { token: string } ) => Promise<User> = ( { token } ) => {
+    return instance.get<ResponseBody<{ user: UserMeta; }>>(
         '/me',
         {
             headers: {
@@ -38,7 +38,7 @@ export const me: ( params: { token: string } ) => Promise<UserMeta> = ( { token 
             },
         },
     )
-        .then( response => response.data.data._embedded.user );
+        .then( response => new User( response.data.data._embedded.user ) );
 };
 /**
  * Refresh Token

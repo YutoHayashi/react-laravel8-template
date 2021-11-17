@@ -8,13 +8,13 @@ export type Meta = {
     is_active: boolean;
 };
 export interface User extends Models<Meta> {
-    hasPerm: ( perms: Permissions[] ) => boolean;
+    hasPerm( perms: Permissions[] ): boolean;
 }
 /**
  * User model
  * @param meta User data
  */
-export const User = class extends Models<Meta> implements User {
+export class User extends Models<Meta> implements User {
     public id?: number;
     public email?: string;
     public name?: string;

@@ -14,7 +14,7 @@ export const routes: Routes = [
         ] },
 
         { path: '/console', component: Pages.Admin.Console.Top, exact: true, children: [
-            //
+            { path: '/users', component: Pages.Admin.Console.Users, exact: true, },
         ] },
 
     ] },

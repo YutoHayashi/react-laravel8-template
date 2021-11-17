@@ -14,13 +14,13 @@ Route::namespace( '\App\Http\Controllers\Api' )->group( function(  ) {
     ], function(  ) {
         Route::post( 'logout', 'AuthController@logout' )->name( 'logout' );
         Route::get( 'me', 'AuthController@me' )->name( 'me' );
-        // Route::group( [
-        //     'middleware' => [ 'permission' ],
-        // ], function(  ) {
-            Route::resource( 'roles', 'RoleController' )->only( [ 'index', 'store', 'update', 'destroy', ] );
-            Route::resource( 'permissions', 'PermissionController' )->only( [ 'index', 'store', 'update', 'destroy', ] );
-            Route::resource( 'users', 'UserController' )->only( [ 'index', 'update', 'destroy', ] );
-        // } );
+        Route::group( [
+            'middleware' => [ 'permission' ],
+        ], function(  ) {
+            Route::resource( 'roles', 'RoleController' )->only( [ 'index', 'store', 'update', 'destroy', 'show', ] );
+            Route::resource( 'permissions', 'PermissionController' )->only( [ 'index', 'store', 'update', 'destroy', 'show', ] );
+            Route::resource( 'users', 'UserController' )->only( [ 'index', 'update', 'destroy', 'show', ] );
+        } );
     } );
 
 

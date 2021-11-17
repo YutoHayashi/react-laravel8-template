@@ -81,4 +81,13 @@ class UserController extends Controller {
         }
     }
 
+    /**
+     * Retrieve user
+     * @param User $user - User model
+     * @return Response 
+     */
+    public function show( User $user ) {
+        return UserResource::create( $user );
+    }
+
 }

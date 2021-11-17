@@ -16,7 +16,7 @@ class CreateUsersTable extends Migration {
             $table->id(  );
             $table->string( 'name' )->comment( 'ユーザー名' );
             $table->string( 'email' )->unique(  )->comment( 'ユーザーメールアドレス' );
-            $table->boolean( 'is_admin' )->default( false )->comment( '管理者フラグ' );
+            $table->boolean( 'is_root' )->default( false )->comment( 'スーパーユーザーフラグ' );
             $table->boolean( 'is_active' )->default( true )->comment( '論理フラグ' );
             $table->timestamp( 'email_verified_at' )->nullable(  )->comment( '本人確認年月日' );
             $table->string( 'password' )->comment( 'パスワード' );

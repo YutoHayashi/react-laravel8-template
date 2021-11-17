@@ -4,7 +4,8 @@ export type Meta = {
     name: string;
     guard_name: string;
 };
-export class Permission extends Models<Meta> {
+export interface Permission extends Models<Meta> {}
+export class Permission extends Models<Meta> implements Permission {
     public id?: number;
     public name?: string;
     public guard_name?: string;

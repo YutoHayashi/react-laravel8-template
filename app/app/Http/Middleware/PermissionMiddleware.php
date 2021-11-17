@@ -27,7 +27,7 @@ class PermissionMiddleware
             $permissions = array( $permission );
         }
         foreach( $permissions as $p ) {
-            if ( auth(  )->user(  )->can( $permission ) ) {
+            if ( auth(  )->user(  )->can( $p ) ) {
                 return $next( $request );
             }
         }

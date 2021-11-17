@@ -18,7 +18,7 @@ class AuthController extends Controller {
      * @return Response
      */
     public function login( \App\Http\Requests\Api\Auth\LoginRequest $request ) {
-        $credentials = request( [ 'email', 'password', ] );
+        $credentials = $request->validated(  );
         try {
             if ( ! $token = auth(  )->attempt( $credentials ) ) {
                 return ResponseBody::create( [
