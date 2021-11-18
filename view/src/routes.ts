@@ -10,7 +10,10 @@ export const routes: Routes = [
         { path: '/logout', component: Pages.Admin.Logout, exact: true, },
 
         { path: '/documents', component: Pages.Admin.Documents.Top, exact: true, children: [
-            //
+            { path: '/getstarted', component: Pages.Admin.Documents.GetStarted, exact: true, },
+            { path: '/app', component: Pages.Admin.Documents.App.Top, exact: true, },
+            { path: '/docker', component: Pages.Admin.Documents.Docker.Top, exact: true, },
+            { path: '/view', component: Pages.Admin.Documents.View.Top, exact: true, },
         ] },
 
         { path: '/console', component: Pages.Admin.Console.Top, exact: true, children: [

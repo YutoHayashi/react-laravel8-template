@@ -6,7 +6,7 @@ export type Handler = {
     endLoading: (  ) => void;
 };
 type Props = JSX.IntrinsicElements[ 'button' ] & {
-    color: string;
+    color?: string;
     onClick?: React.MouseEventHandler<HTMLButtonElement>;
     className?: string;
     to?: string;
@@ -26,10 +26,10 @@ export const Btn = React.forwardRef<Handler, Props>( ( props, ref ) => {
     const endLoading = (  ) => setState( { loading: false, } );
     React.useImperativeHandle( ref, (  ) => ( { startLoading, endLoading } ) );
     if ( to ) {
-        return <Link to={ to } className={ `bg-${ color }-500 hover:bg-${ color }-400 block py-1 px-5 rounded text-white font-base text-xs ${ className }` }>{ children }</Link>;
+        return <Link to={ to } className={ `bg-${ color }-500 hover:bg-${ color }-400 block py-1 px-5 rounded ${ color ? 'text-white' : '' } font-base text-xs ${ className }` }>{ children }</Link>;
     } else {
         return (
-            <button className={ `bg-${ color }-500 hover:bg-${ color }-400 block py-1 px-5 rounded text-white font-base ${ className }` } onClick={ onClick }>
+            <button className={ `bg-${ color }-500 hover:bg-${ color }-400 block py-1 px-5 rounded ${ color ? 'text-white' : '' } font-base ${ className }` } onClick={ onClick }>
                 { loading ? (
                     <Mdi icon='loading' className='mdi-spin' />
                 ) : children }

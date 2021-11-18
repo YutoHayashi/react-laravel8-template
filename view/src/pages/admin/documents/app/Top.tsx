@@ -1,0 +1,9 @@
+import React from 'react';
+import { Layout } from '../Layout';
+export const Top: React.FC<{}> = ( {  } ) => {
+    return (
+        <Layout>
+            <h2 className='font-bold text-xl'>REST Laravel8</h2>
+        </Layout>
+    );
+};
