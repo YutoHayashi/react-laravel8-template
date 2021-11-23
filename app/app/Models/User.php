@@ -66,6 +66,15 @@ class User extends Authenticatable implements JWTSubject {
     }
 
     /**
+     * Override create method
+     */
+    public static function create( $attributes ) {
+        $user = ( new static )->newQuery(  )->create( $attributes );
+        $user->notify( new \App\Notifications\UserRegistered );
+        return $user;
+    }
+
+    /**
      * Create admin user.
      */
     public static function createRoot( $payload ) {

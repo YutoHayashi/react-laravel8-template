@@ -5,7 +5,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use \App\Models\User;
-use \App\Http\Resources\Api\Auth\ResponseBody;
+use \App\Http\Resources\Api\ResponseBody;
 use \App\Http\Resources\Api\Auth\UserResource;
 use \App\Http\Resources\Api\Auth\UserResourceCollection;
 
@@ -49,7 +49,7 @@ class UserController extends Controller {
      * @param \App\Http\Requests\Api\Auth\UpdateRequest $request - Validated request object.
      * @return Response 
      */
-    public function update( User $user, \App\Http\Requests\Api\Auth\UpdateRequest $payload ) {
+    public function update( User $user, \App\Http\Requests\Api\Auth\UpdateRequest $request ) {
         $payload = $request->validated(  );
         try {
             $user->update( $payload );

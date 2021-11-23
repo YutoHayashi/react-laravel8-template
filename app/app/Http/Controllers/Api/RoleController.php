@@ -29,7 +29,7 @@ class RoleController extends Controller {
 
     /**
      * Store role.
-     * @param StoreRequest $request - Validated request object.
+     * @param \App\Http\Requests\Api\Role\StoreRequest $request - Validated request object.
      * @return Reponse 
      */
     public function store( \App\Http\Requests\Api\Role\StoreRequest $request ) {
@@ -49,10 +49,10 @@ class RoleController extends Controller {
     /**
      * Update role.
      * @param Role $role - Role object
-     * @param UpdateRequest $request - Validated request object.
+     * @param \App\Http\Requests\Api\Role\UpdateRequest $request - Validated request object.
      * @return Response 
      */
-    public function update( Role $role, \App\Http\Requests\Api\Role\UpdateRequest $reqeust ) {
+    public function update( Role $role, \App\Http\Requests\Api\Role\UpdateRequest $request ) {
         $payload = $request->validated(  );
         try {
             $role->update( $payload );

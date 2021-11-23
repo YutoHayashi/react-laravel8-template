@@ -51,7 +51,7 @@ class PermissionController extends Controller {
      * @param UpdateRequest $request - Validated request object
      * @return Response
      */
-    public function update( Permission $permission, \App\Http\Requests\Api\Permission\UpdateRequest $reqeust ) {
+    public function update( Permission $permission, \App\Http\Requests\Api\Permission\UpdateRequest $request ) {
         $payload = $request->validated(  );
         try {
             $permission->update( $payload );

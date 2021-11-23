@@ -18,7 +18,7 @@ class PermissionResource extends JsonResource {
         ];
     }
 
-    public static function create( Spatie\Permission\Models\Permission $permission ) {
+    public static function create( \Spatie\Permission\Models\Permission $permission ) {
         return \App\Http\Resources\Api\ResponseBody::create( [
             '_embedded' => new PermissionResource( $permission ),
         ] );

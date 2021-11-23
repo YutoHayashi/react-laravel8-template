@@ -13,15 +13,13 @@ class CreateRootUserSeeder extends Seeder
      */
     public function run(  ) {
         \Illuminate\Support\Facades\DB::transaction( function(  ) {
-            $user = \App\Models\User::createRoot( [
+            $root = \App\Models\User::createRoot( [
                 'name' => 'root',
                 'email' => 'root@lvh.me',
                 'password' => 'password',
             ] );
-            $role = \Spatie\Permission\Models\Role::create( [ 'name' => 'root', ] );
-            $permissions = \Spatie\Permission\Models\Permission::pluck( 'id' )->all(  );
-            $role->syncPermissions( $permissions );
-            $user->assignRole( [ $role->id ] );
+            $root_role = \Spatie\Permission\Models\Role::where( [ 'name' => 'root', ] )->first(  );
+            $root->assignRole( [ $root_role->id ] );
         } );
     }
 }
