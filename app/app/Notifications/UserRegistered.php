@@ -27,7 +27,9 @@ class UserRegistered extends Notification
      * @return array
      */
     public function via( $notifiable ) {
-        return [ 'mail' ];
+        return [
+            \Illuminate\Notifications\Channels\MailChannel::class,
+        ];
     }
 
     /**

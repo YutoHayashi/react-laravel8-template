@@ -24,7 +24,7 @@ class SaveRequest extends FormRequest
      */
     public function rules(  ) {
         return [
-            'name' => [ 'required', 'unique:users,name', ],
+            'name' => [ 'required', 'unique:permissions,name', ],
         ];
     }
 

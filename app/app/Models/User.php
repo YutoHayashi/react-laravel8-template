@@ -8,10 +8,11 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 use Spatie\Permission\Traits\HasRoles;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class User extends Authenticatable implements JWTSubject {
 
-    use HasFactory, Notifiable, HasRoles;
+    use HasFactory, Notifiable, HasRoles, SoftDeletes;
 
     /**
      * The database table used by the model.
@@ -19,6 +20,8 @@ class User extends Authenticatable implements JWTSubject {
      * @var string
      */
     protected $table = 'users';
+
+    protected $keyType = 'string';
 
     /**
      * The attributes that are mass assignable.
@@ -48,6 +51,13 @@ class User extends Authenticatable implements JWTSubject {
     ];
 
     /**
+     * The attributes that should be mutated to dates.
+     */
+    protected $dates = [
+        'deleted_at',
+    ];
+
+    /**
      * Get the identifier that will be stored in the subject claim of the JWT
      */
     public function getJWTIdentifier(  ) {
@@ -66,6 +76,22 @@ class User extends Authenticatable implements JWTSubject {
     }
 
     /**
+     * Get the value indicatin whether the IDs are incrementing.
+     * @return bool
+     */
+    public function getIncrementing(  ) {
+        return false;
+    }
+
+    protected static function boot(  ) {
+        parent::boot(  );
+        static::creating( function ( $user ) {
+            $user->{ $user->getKeyName(  ) } = \Illuminate\Support\Str::uuid(  )->toString(  );
+            $user->email_verification_token = \Illuminate\Support\Str::uuid(  )->toString(  );
+        } );
+    }
+
+    /**
      * Override create method
      */
     public static function create( $attributes ) {
@@ -75,11 +101,11 @@ class User extends Authenticatable implements JWTSubject {
     }
 
     /**
-     * Create admin user.
+     * Create root user.
      */
-    public static function createRoot( $payload ) {
-        return User::create(
-            $payload + [
+    public static function createRoot( $attributes ) {
+        return ( new static )->newQuery(  )->create(
+            $attributes + [
                 'is_root' => true,
             ]
         );

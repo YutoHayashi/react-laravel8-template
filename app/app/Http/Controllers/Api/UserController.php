@@ -90,4 +90,21 @@ class UserController extends Controller {
         return UserResource::create( $user );
     }
 
+    /**
+     * Restore use data
+     * @param User $user
+     * @return Response 
+     */
+    public function restore( User $user ) {
+        try {
+            $user->restore(  );
+            return UserResource::create( $user );
+        } catch( \Exception $e ) {
+            return ResponseBody::create( [
+                'code' => 400,
+                'errors' => [ $e->getMessage(  ), ],
+            ] );
+        }
+    }
+
 }

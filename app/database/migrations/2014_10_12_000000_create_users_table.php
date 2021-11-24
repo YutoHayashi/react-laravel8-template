@@ -10,16 +10,16 @@ class CreateUsersTable extends Migration {
      *
      * @return void
      */
-    public function up(  )
-    {
+    public function up(  ) {
         Schema::create( 'users', function ( Blueprint $table ) {
-            $table->id(  );
+            $table->uuid( 'id' )->primary(  );
             $table->string( 'name' )->comment( 'ユーザー名' );
             $table->string( 'email' )->unique(  )->comment( 'ユーザーメールアドレス' );
             $table->boolean( 'is_root' )->default( false )->comment( 'スーパーユーザーフラグ' );
-            $table->boolean( 'is_active' )->default( true )->comment( '論理フラグ' );
+            $table->uuid( 'email_verification_token' )->comment( 'メールアドレス検証用トークン' );
             $table->timestamp( 'email_verified_at' )->nullable(  )->comment( '本人確認年月日' );
             $table->string( 'password' )->comment( 'パスワード' );
+            $table->softDeletes(  );
             $table->rememberToken(  );
             $table->timestamps(  );
         } );
@@ -30,8 +30,7 @@ class CreateUsersTable extends Migration {
      *
      * @return void
      */
-    public function down(  )
-    {
+    public function down(  ) {
         Schema::dropIfExists( 'users' );
     }
 }

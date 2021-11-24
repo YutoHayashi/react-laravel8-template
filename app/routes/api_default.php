@@ -9,6 +9,7 @@ Route::namespace( '\App\Http\Controllers\Api' )->group( function(  ) {
     Route::post( 'login', 'AuthController@login' )->name( 'login' );
     Route::get( 'refresh', 'AuthController@refresh' )->name( 'refresh' );
     Route::post( 'register', 'UserController@store' )->name( 'register' );
+    Route::get( 'verify', 'UserController@verify' )->name( 'verify' );
     Route::group( [
         'middleware' => [ 'jwt.auth' ],
     ], function(  ) {
@@ -20,6 +21,12 @@ Route::namespace( '\App\Http\Controllers\Api' )->group( function(  ) {
             Route::resource( 'roles', 'RoleController' )->only( [ 'index', 'store', 'update', 'destroy', 'show', ] );
             Route::resource( 'permissions', 'PermissionController' )->only( [ 'index', 'store', 'update', 'destroy', 'show', ] );
             Route::resource( 'users', 'UserController' )->only( [ 'index', 'update', 'destroy', 'show', ] );
+            Route::group( [
+                'prefix' => 'users',
+                'as' => 'users.',
+            ], function(  ) {
+                Route::post( 'restore/{user}', 'UserController@restore' )->name( 'users.restore' );
+            } );
         } );
     } );
 
