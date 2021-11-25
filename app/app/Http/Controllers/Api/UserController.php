@@ -6,8 +6,8 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use \App\Models\User;
 use \App\Http\Resources\Api\ResponseBody;
-use \App\Http\Resources\Api\Auth\UserResource;
-use \App\Http\Resources\Api\Auth\UserResourceCollection;
+use \App\Http\Resources\Api\User\UserResource;
+use \App\Http\Resources\Api\User\UserResourceCollection;
 
 class UserController extends Controller {
 

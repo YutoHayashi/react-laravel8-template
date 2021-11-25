@@ -24,9 +24,15 @@ class StoreRequest extends FormRequest
      */
     public function rules(  ) {
         return [
-            'name' => [ 'required', 'string', 'max:50', 'min:4', ],
-            'email' => [ 'required', 'max:255', 'email', 'unique:users,email', ],
-            'password' => [ 'required', 'string', 'min:8', 'max:50', ],
+            'name' => [
+                'required', 'string', 'max:50', 'min:4',
+            ],
+            'email' => [
+                'required', 'max:255', 'email', \Illuminate\Validation\Rule::unique( 'users', 'email' )->whereNull( 'deleted_at' ),
+            ],
+            'password' => [
+                'required', 'string', 'min:8', 'max:50',
+            ],
         ];
     }
 

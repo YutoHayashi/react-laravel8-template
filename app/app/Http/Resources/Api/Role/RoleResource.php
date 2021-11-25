@@ -13,14 +13,14 @@ class RoleResource extends JsonResource {
      * @return array|\Illuminate\Contracts\Support\Arrayable|\JsonSerializable
      */
     public function toArray( $request ) {
-        return [
-            'role' => parent::toArray( $request ),
-        ];
+        return parent::toArray( $request );
     }
 
     public static function create( \Spatie\Permission\Models\Role $role ) {
         return \App\Http\Resources\Api\ResponseBody::create( [
-            '_embedded' => new RoleResource( $role ),
+            '_embedded' => [
+                'role' => new RoleResource( $role ),
+            ],
         ] );
     }
 

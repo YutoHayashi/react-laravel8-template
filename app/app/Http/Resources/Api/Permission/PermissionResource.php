@@ -13,14 +13,14 @@ class PermissionResource extends JsonResource {
      * @return array|\Illuminate\Contracts\Support\Arrayable|\JsonSerializable
      */
     public function toArray( $request ) {
-        return [
-            'permission' => parent::toArray( $request ),
-        ];
+        return parent::toArray( $request );
     }
 
     public static function create( \Spatie\Permission\Models\Permission $permission ) {
         return \App\Http\Resources\Api\ResponseBody::create( [
-            '_embedded' => new PermissionResource( $permission ),
+            '_embedded' => [
+                'permission' => new PermissionResource( $permission ),
+            ],
         ] );
     }
 

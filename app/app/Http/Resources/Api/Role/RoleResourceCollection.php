@@ -13,16 +13,16 @@ class RoleResourceCollection extends ResourceCollection {
      * @return array|\Illuminate\Contracts\Support\Arrayable|\JsonSerializable
      */
     public function toArray( $request ) {
-        return [
-            'roles' => $this->collection->map( function( $role ) {
-                return new RoleResource( $role );
-            } ),
-        ];
+        return $this->collection->map( function( $role ) {
+            return new RoleResource( $role->resource );
+        } );
     }
 
     public static function create( \Illuminate\Database\Eloquent\Collection $roles ) {
         return \App\Http\Resources\Api\ResponseBody::create( [
-            '_embedded' => new RoleResourceCollection( $roles ),
+            '_embedded' => [
+                'roles' => new RoleResourceCollection( $roles ),
+            ],
         ] );
     }
 

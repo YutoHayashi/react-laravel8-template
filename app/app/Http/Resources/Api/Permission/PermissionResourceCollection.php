@@ -13,16 +13,16 @@ class PermissionResourceCollection extends ResourceCollection {
      * @return array|\Illuminate\Contracts\Support\Arrayable|\JsonSerializable
      */
     public function toArray( $request ) {
-        return [
-            'permissions' => $this->collection->map( function( $permission ) {
-                return new PermissionResource( $permission );
-            } )->all(  ),
-        ];
+        return $this->collection->map( function( $permission ) {
+            return new PermissionResource( $permission->resource );
+        } )->all(  );
     }
 
     public static function create( \Illuminate\Database\Eloquent\Collection $permissions ) {
         return \App\Http\Resources\Api\ResponseBody::create( [
-            '_embedded' => new PermissionResourceCollection( $permissions ),
+            '_embedded' => [
+                'permissions' => new PermissionResourceCollection( $permissions ),
+            ],
         ] );
     }
 

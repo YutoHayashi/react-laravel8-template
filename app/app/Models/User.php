@@ -12,7 +12,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class User extends Authenticatable implements JWTSubject {
 
-    use HasFactory, Notifiable, HasRoles, SoftDeletes;
+    use HasFactory, Notifiable, HasRoles, SoftDeletes, \App\Models\Traits\CascadeSoftDelete;
 
     /**
      * The database table used by the model.
@@ -38,7 +38,7 @@ class User extends Authenticatable implements JWTSubject {
      * @var array
      */
     protected $hidden = [
-        'password', 'remember_token', 'created_at', 'updated_at', 'email_verified_at',
+        'password', 'remember_token', 'created_at', 'updated_at', 'email_verified_at', 'email_verification_token',
     ];
 
     /**
@@ -55,6 +55,10 @@ class User extends Authenticatable implements JWTSubject {
      */
     protected $dates = [
         'deleted_at',
+    ];
+
+    protected $cascadeDeletes = [
+        'profile',
     ];
 
     /**
@@ -96,6 +100,7 @@ class User extends Authenticatable implements JWTSubject {
      */
     public static function create( $attributes ) {
         $user = ( new static )->newQuery(  )->create( $attributes );
+        Profile::create( $user );
         $user->notify( new \App\Notifications\UserRegistered );
         return $user;
     }
@@ -109,6 +114,14 @@ class User extends Authenticatable implements JWTSubject {
                 'is_root' => true,
             ]
         );
+    }
+
+    public function profile(  ) {
+        return $this->belongsTo( Profile::class );
+    }
+
+    public function __toString(  ) {
+        return $this->id;
     }
 
 }

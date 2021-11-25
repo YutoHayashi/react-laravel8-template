@@ -12,7 +12,7 @@ class CreateUsersTable extends Migration {
      */
     public function up(  ) {
         Schema::create( 'users', function ( Blueprint $table ) {
-            $table->uuid( 'id' )->primary(  );
+            $table->uuid( 'id' )->primary(  )->unique(  );
             $table->string( 'name' )->comment( 'ユーザー名' );
             $table->string( 'email' )->unique(  )->comment( 'ユーザーメールアドレス' );
             $table->boolean( 'is_root' )->default( false )->comment( 'スーパーユーザーフラグ' );
