@@ -38,7 +38,11 @@ class User extends Authenticatable implements JWTSubject {
      * @var array
      */
     protected $hidden = [
-        'password', 'remember_token', 'created_at', 'updated_at', 'email_verified_at', 'email_verification_token',
+        'password', 'remember_token', 'created_at', 'updated_at', 'email_verified_at', 'email_verification_token', 'deleted_at',
+    ];
+
+    protected $visible = [
+        'id', 'name', 'email', 'is_root', 'profile',
     ];
 
     /**
@@ -108,7 +112,7 @@ class User extends Authenticatable implements JWTSubject {
     /**
      * Create root user.
      */
-    public static function createRoot( $attributes ) {
+    public static function createSuper( $attributes ) {
         return ( new static )->newQuery(  )->create(
             $attributes + [
                 'is_root' => true,

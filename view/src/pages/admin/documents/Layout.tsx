@@ -1,12 +1,12 @@
 import React from 'react';
 import { Admin } from '@/components/layouts/Admin';
 import { Btn } from '@/components/molecules/Btn';
-import { WithoutAuthentication } from '@/middleware/Auth';
+import { AuthManager } from '@/middleware/Auth';
 import { Redirect } from 'react-router';
 export const Layout: React.FC<{}> = ( { children } ) => {
     return (
         <Admin>
-            <WithoutAuthentication>
+            <AuthManager>
                 { ( { isAuthenticated } ) => {
                     if ( !isAuthenticated ) return <Redirect to={ `/admin/login` } />
                     return (
@@ -36,7 +36,7 @@ export const Layout: React.FC<{}> = ( { children } ) => {
                         </div>
                     );
                 } }
-            </WithoutAuthentication>
+            </AuthManager>
         </Admin>
     );
 };

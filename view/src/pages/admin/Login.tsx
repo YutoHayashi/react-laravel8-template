@@ -1,7 +1,7 @@
 import React from 'react';
 import { Admin } from '@/components/layouts/Admin';
 import { Btn, Handler as BtnHandler } from '@/components/molecules/Btn';
-import { WithoutAuthentication } from '@/middleware/Auth';
+import { AuthManager } from '@/middleware/Auth';
 import { Redirect } from 'react-router';
 const btn: React.Ref<BtnHandler> = React.createRef(  );
 const email: React.Ref<HTMLInputElement> = React.createRef(  );
@@ -13,7 +13,7 @@ const getData = (  ) => ( {
 export const Login: React.VFC<{}> = ( {  } ) => {
     return (
         <Admin>
-            <WithoutAuthentication>
+            <AuthManager>
                 { ( { login, isAuthenticated } ) => {
                     if ( isAuthenticated ) return <Redirect to={ `/admin/console` } />
                     return (
@@ -36,7 +36,7 @@ export const Login: React.VFC<{}> = ( {  } ) => {
                         </div>
                     );
                 } }
-            </WithoutAuthentication>
+            </AuthManager>
         </Admin>
     );
 };

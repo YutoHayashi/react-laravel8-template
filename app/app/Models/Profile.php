@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Profile extends Model {
 
-    use HasFactory, SoftDeletes, \App\Models\Traits\PrimaryUuid;
+    use HasFactory, SoftDeletes, \App\Models\Traits\UseUuidForPK;
 
     protected $table = 'profiles';
 

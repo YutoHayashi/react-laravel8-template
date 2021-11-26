@@ -2,7 +2,7 @@
 
 namespace App\Models\Traits;
 
-trait PrimaryUuid {
+trait UseUuidForPK {
 
     public static function boot(  ) {
         parent::boot(  );

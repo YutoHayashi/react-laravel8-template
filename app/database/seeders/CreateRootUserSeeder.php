@@ -13,7 +13,7 @@ class CreateRootUserSeeder extends Seeder
      */
     public function run(  ) {
         \Illuminate\Support\Facades\DB::transaction( function(  ) {
-            $root = \App\Models\User::createRoot( [
+            $root = \App\Models\User::createSuper( [
                 'name' => 'root',
                 'email' => 'root@lvh.me',
                 'password' => 'password',

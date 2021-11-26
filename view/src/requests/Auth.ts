@@ -1,5 +1,5 @@
 import { instance, Credentials } from './requests';
-import { User, Meta as UserMeta } from '@/models/User';
+import { User, Meta } from '@/models/User';
 import { ResponseBody, TokenResource } from '@/responses/types';
 /**
  * Login
@@ -10,7 +10,7 @@ import { ResponseBody, TokenResource } from '@/responses/types';
  *  const token = await login( { email, password } );
  * ```
  */
-export const login: ( params: Pick<UserMeta, 'email'> & { password: string; } ) => Promise<{ token: string; }> = params => {
+export const login: ( params: Pick<Meta, 'email'> & { password: string; } ) => Promise<{ token: string; }> = params => {
     const data = new FormData(  );
     ( Object.keys( params ) as ( keyof typeof params )[] ).forEach( k => data.append( k, params[ k ] ) );
     return instance.post<ResponseBody<TokenResource>>(
@@ -30,7 +30,7 @@ export const login: ( params: Pick<UserMeta, 'email'> & { password: string; } ) 
  * @returns User
  */
 export const me: ( params: { token: string } ) => Promise<User> = ( { token } ) => {
-    return instance.get<ResponseBody<{ user: UserMeta; }>>(
+    return instance.get<ResponseBody<{ user: Meta; }>>(
         '/me',
         {
             headers: {

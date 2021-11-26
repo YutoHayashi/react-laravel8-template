@@ -1,5 +1,5 @@
 import React from 'react';
-import { WithoutAuthentication } from '@/middleware/Auth';
+import { AuthManager } from '@/middleware/Auth';
 import { Link } from 'react-router-dom';
 import { Mdi } from '@/components/atoms/Mdi';
 import { Btn, Handler } from '@/components/molecules/Btn';
@@ -26,7 +26,7 @@ export const Admin: React.FC<{}> = ( { children } ) => {
                 </div>
                 <nav className='mb-10'>
                     <ul className='flex items-center justify-center flex-wrap'>
-                        <WithoutAuthentication>
+                        <AuthManager>
                             { ( { isAuthenticated } ) => ( [
                                 { to: '/admin/documents', title: 'Documents', },
                                 { to: '/admin/console', title: 'Admin Console', },
@@ -36,11 +36,11 @@ export const Admin: React.FC<{}> = ( { children } ) => {
                                     <Link to={ item.to } className='py-1 px-5 rounded border border-gray-600 flex items-center justify-center hover:bg-gray-600 hover:text-white'>{ item.title }</Link>
                                 </li>
                             ) ) }
-                        </WithoutAuthentication>
+                        </AuthManager>
                     </ul>
                 </nav>
             </div>
-            <div className='h-full flex items-center justify-center flex-wrap mx-2 md:px-10 py-5 box-border'>
+            <div className='h-screen flex items-center justify-center flex-wrap mx-2 md:px-10 py-5 box-border'>
                 { children }
             </div>
         </main>

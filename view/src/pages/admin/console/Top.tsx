@@ -1,16 +1,16 @@
 import React from 'react';
 import { Redirect } from 'react-router';
 import { Admin } from '@/components/layouts/Admin';
-import { WithoutAuthentication } from '@/middleware/Auth';
+import { AuthManager } from '@/middleware/Auth';
 export const Top: React.VFC<{}> = ( {  } ) => {
     return (
         <Admin>
-            <WithoutAuthentication>
+            <AuthManager>
                 { ( { isAuthenticated } ) => {
                     if ( !isAuthenticated ) return <Redirect to={ `/admin/login` } />;
                     return <Redirect to={ `/admin/console/users` } />;
                 } }
-            </WithoutAuthentication>
+            </AuthManager>
         </Admin>
     );
 };

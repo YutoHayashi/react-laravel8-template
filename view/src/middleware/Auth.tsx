@@ -116,11 +116,3 @@ export const WithPermission: React.FC<{ perms: Permissions[], children: ( args: 
         return null;
     } } />;
 };
-/**
- * Show nodes that do not require authentication.
- * @param param0 args
- * @returns WithoutAuthentication
- */
-export const WithoutAuthentication: React.FC<{ children: ( args: Pick<States, 'login' | 'check' | 'isAuthenticated'> ) => React.ReactNode }> = ( { children } ) => {
-    return <AuthManager children={ ( { login, check, isAuthenticated } ) => children( { login, check, isAuthenticated } ) } />;
-};
