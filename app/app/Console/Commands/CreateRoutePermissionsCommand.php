@@ -39,8 +39,8 @@ class CreateRoutePermissionsCommand extends Command
         $permissions = [  ];
         \Illuminate\Support\Facades\DB::transaction( function(  ) use ( $routes, $permissions ) {
             foreach( $routes as $route ) {
-                if ( $route->getName(  ) && ! ( \Spatie\Permission\Models\Permission::where( 'name', $route->getName(  ) )->exists(  ) ) ) {
-                    array_push( $permissions, \Spatie\Permission\Models\Permission::create( [
+                if ( $route->getName(  ) && ! ( \App\Models\Permission::where( 'name', $route->getName(  ) )->exists(  ) ) ) {
+                    array_push( $permissions, \App\Models\Permission::create( [
                         'name' => $route->getName(  ),
                     ] ) );
                 }
@@ -51,7 +51,7 @@ class CreateRoutePermissionsCommand extends Command
     }
 
     private function _assignPermission( $permissions ) {
-        if ( ! ( is_null( $root_role = \Spatie\Permission\Models\Role::where( 'name', 'root' )->first(  ) ) ) && count( $permissions ) > 0 ) {
+        if ( ! ( is_null( $root_role = \App\Models\Role::where( 'name', 'root' )->first(  ) ) ) && count( $permissions ) > 0 ) {
             $root_role->syncPermissions( array_map( function( $permission ) {
                 return $permission->id;
             }, $permissions ) );

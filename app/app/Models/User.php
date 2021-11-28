@@ -12,7 +12,11 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class User extends Authenticatable implements JWTSubject {
 
-    use HasFactory, Notifiable, HasRoles, SoftDeletes, \App\Models\Traits\CascadeSoftDelete;
+    use HasFactory,
+        Notifiable,
+        HasRoles,
+        SoftDeletes,
+        \App\Models\Traits\Stringable;
 
     /**
      * The database table used by the model.
@@ -21,15 +25,13 @@ class User extends Authenticatable implements JWTSubject {
      */
     protected $table = 'users';
 
-    protected $keyType = 'string';
-
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password', 'is_root',
+        'name', 'email', 'password', 'is_root', 'email_verified_at',
     ];
 
     /**
@@ -38,11 +40,11 @@ class User extends Authenticatable implements JWTSubject {
      * @var array
      */
     protected $hidden = [
-        'password', 'remember_token', 'created_at', 'updated_at', 'email_verified_at', 'email_verification_token', 'deleted_at',
+        'password', 'remember_token', 'email_verified_at', 'email_verification_token', 'created_at', 'updated_at', 'deleted_at',
     ];
 
     protected $visible = [
-        'id', 'name', 'email', 'is_root', 'profile',
+        'id', 'name', 'email', 'is_root',
     ];
 
     /**
@@ -59,10 +61,6 @@ class User extends Authenticatable implements JWTSubject {
      */
     protected $dates = [
         'deleted_at',
-    ];
-
-    protected $cascadeDeletes = [
-        'profile',
     ];
 
     /**
@@ -83,49 +81,33 @@ class User extends Authenticatable implements JWTSubject {
         $this->attributes[ 'password' ] = \Illuminate\Support\Facades\Hash::make( $unhashed );
     }
 
-    /**
-     * Get the value indicatin whether the IDs are incrementing.
-     * @return bool
-     */
-    public function getIncrementing(  ) {
-        return false;
-    }
-
-    protected static function boot(  ) {
+    public static function boot(  ) {
         parent::boot(  );
-        static::creating( function ( $user ) {
-            $user->{ $user->getKeyName(  ) } = \Illuminate\Support\Str::uuid(  )->toString(  );
+        static::creating( function( $user ) {
             $user->email_verification_token = \Illuminate\Support\Str::uuid(  )->toString(  );
         } );
     }
 
     /**
-     * Override create method
+     * Create super user.
      */
-    public static function create( $attributes ) {
-        $user = ( new static )->newQuery(  )->create( $attributes );
-        Profile::create( $user );
-        $user->notify( new \App\Notifications\UserRegistered );
-        return $user;
-    }
-
-    /**
-     * Create root user.
-     */
-    public static function createSuper( $attributes ) {
-        return ( new static )->newQuery(  )->create(
+    public static function createSuper( Array $attributes ) {
+        return static::query(  )->create(
             $attributes + [
                 'is_root' => true,
             ]
         );
     }
 
-    public function profile(  ) {
-        return $this->belongsTo( Profile::class );
+    /**
+     * Create base user.
+     */
+    public static function createBase( Array $attributes ) {
+        return static::query(  )->create( $attributes );
     }
 
-    public function __toString(  ) {
-        return $this->id;
+    public function profile(  ) {
+        return $this->belongsTo( Profile::class );
     }
 
 }

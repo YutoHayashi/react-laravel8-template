@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
+use Illuminate\Http\JsonResponse;
 use \App\Models\User;
 use \App\Http\Resources\Api\ResponseBody;
 use \App\Http\Resources\Api\User\UserResource;
@@ -13,7 +13,7 @@ class UserController extends Controller {
 
     /**
      * Index user
-     * @return Response  
+     * @return JsonResponse  
      */
     public function index(  ) {
         try {
@@ -29,12 +29,12 @@ class UserController extends Controller {
     /**
      * Store user
      * @param \App\Http\Requests\Api\Auth\StoreRequest $request - Validated request object.
-     * @return Response 
+     * @return JsonResponse 
      */
-    public function store( \App\Http\Requests\Api\Auth\StoreRequest $request ) {
+    public function store( \App\Http\Requests\Api\User\StoreRequest $request ) {
         $payload = $request->validated(  );
         try {
-            return UserResource::create( User::create( $payload ) );
+            return UserResource::create( User::createBase( $payload ) );
         } catch ( \Exception $e ) {
             return ResponseBody::create( [
                 'code' => 400,
@@ -47,9 +47,9 @@ class UserController extends Controller {
      * Update user
      * @param User $user - User object.
      * @param \App\Http\Requests\Api\Auth\UpdateRequest $request - Validated request object.
-     * @return Response 
+     * @return JsonResponse 
      */
-    public function update( User $user, \App\Http\Requests\Api\Auth\UpdateRequest $request ) {
+    public function update( User $user, \App\Http\Requests\Api\User\UpdateRequest $request ) {
         $payload = $request->validated(  );
         try {
             $user->update( $payload );
@@ -65,7 +65,7 @@ class UserController extends Controller {
     /**
      * Destroy user.
      * @param User $user - User object.
-     * @return Response 
+     * @return JsonResponse 
      */
     public function destroy( User $user ) {
         try {
@@ -84,7 +84,7 @@ class UserController extends Controller {
     /**
      * Retrieve user
      * @param User $user - User model
-     * @return Response 
+     * @return JsonResponse 
      */
     public function show( User $user ) {
         return UserResource::create( $user );
@@ -93,7 +93,7 @@ class UserController extends Controller {
     /**
      * Restore use data
      * @param User $user
-     * @return Response 
+     * @return JsonResponse 
      */
     public function restore( User $user ) {
         try {
@@ -103,6 +103,27 @@ class UserController extends Controller {
             return ResponseBody::create( [
                 'code' => 400,
                 'errors' => [ $e->getMessage(  ), ],
+            ] );
+        }
+    }
+
+    /**
+     * Verify user email
+     * @param Request $request 
+     * @return JsonResponse 
+     */
+    public function verify( Request $request ) {
+        if (
+            User::where( 'email_verification_token', $request->get( 'email_verification_token' ) )
+                ->firstOrFail(  )
+                ->update( [
+                    'email_verified_at' => \Carbon\Carbon::now(  ),
+                ] )
+        ) {
+            return ResponseBody::create( [  ] );
+        } else {
+            return ResponseBody::create( [
+                'code' => 400,
             ] );
         }
     }

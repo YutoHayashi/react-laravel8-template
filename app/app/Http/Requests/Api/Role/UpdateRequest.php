@@ -3,18 +3,18 @@
 namespace App\Http\Requests\Api\Role;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Contracts\Validation\Validator;
-use Illuminate\Http\Exceptions\HttpResponseException;
 
-class UpdateRequest extends FormRequest
-{
+class UpdateRequest extends FormRequest {
+
+    use \App\Http\Requests\Traits\FailedValidation;
+
     /**
      * Determine if the user is authorized to make this request.
      *
      * @return bool
      */
     public function authorize(  ) {
-        return false;
+        return true;
     }
 
     /**
@@ -24,24 +24,10 @@ class UpdateRequest extends FormRequest
      */
     public function rules(  ) {
         return [
-            'name' => [ 'required', ],
-            'permission' => [ 'required', ],
+            'name' => [
+                'unique:roles,name',
+            ],
         ];
     }
 
-    public function messages(  ) {
-        return [
-            'name.required' => '',
-            'permission.required' => '',
-        ];
-    }
-
-    protected function failedValidation( Validator $validator ) {
-        throw new HttpResponseException(
-            \App\Http\Resources\Api\ResponseBody::create( [
-                'code' => 400,
-                'errors' => $validator->errors(  )->toArray(  ),
-            ] )
-        );
-    }
 }

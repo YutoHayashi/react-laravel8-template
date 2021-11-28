@@ -13,11 +13,12 @@ class CreateProfilesTable extends Migration
      */
     public function up(  ) {
         Schema::create( 'profiles', function ( Blueprint $table ) {
-            $table->uuid( 'id' )->primary(  )->unique(  );
+            $table->id(  );
             $table->foreignIdFor( \App\Models\User::class, 'user_id' )
                 ->constrained(  )
                 ->cascadeOnUpdate(  )
                 ->cascadeOnDelete(  );
+            $table->string( 'name' )->nullable(  )->default( null )->comment( 'ユーザー名' );
             $table->softDeletes(  );
             $table->timestamps(  );
         } );

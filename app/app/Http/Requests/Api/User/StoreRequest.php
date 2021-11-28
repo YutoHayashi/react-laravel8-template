@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests\Api\Role;
+namespace App\Http\Requests\Api\User;
 
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -24,8 +24,11 @@ class StoreRequest extends FormRequest {
      */
     public function rules(  ) {
         return [
-            'name' => [
-                'required', 'unique:roles,name',
+            'email' => [
+                'required', 'max:255', 'email', \Illuminate\Validation\Rule::unique( 'users', 'email' )->whereNull( 'deleted_at' ),
+            ],
+            'password' => [
+                'required', 'string', 'min:8', 'max:50',
             ],
         ];
     }

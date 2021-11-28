@@ -12,15 +12,13 @@ class CreateUsersTable extends Migration {
      */
     public function up(  ) {
         Schema::create( 'users', function ( Blueprint $table ) {
-            $table->uuid( 'id' )->primary(  )->unique(  );
-            $table->string( 'name' )->comment( 'ユーザー名' );
+            $table->id(  );
             $table->string( 'email' )->unique(  )->comment( 'ユーザーメールアドレス' );
             $table->boolean( 'is_root' )->default( false )->comment( 'スーパーユーザーフラグ' );
             $table->uuid( 'email_verification_token' )->comment( 'メールアドレス検証用トークン' );
             $table->timestamp( 'email_verified_at' )->nullable(  )->comment( '本人確認年月日' );
             $table->string( 'password' )->comment( 'パスワード' );
             $table->softDeletes(  );
-            $table->rememberToken(  );
             $table->timestamps(  );
         } );
     }

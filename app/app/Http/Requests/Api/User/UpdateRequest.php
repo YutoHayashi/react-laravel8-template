@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\Api\Role;
+namespace App\Http\Requests\Api\User;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreRequest extends FormRequest {
+class UpdateRequest extends FormRequest {
 
     use \App\Http\Requests\Traits\FailedValidation;
 
@@ -24,8 +24,8 @@ class StoreRequest extends FormRequest {
      */
     public function rules(  ) {
         return [
-            'name' => [
-                'required', 'unique:roles,name',
+            'email' => [
+                'email', 'unique:users,email,'.$this->id, 'max:255',
             ],
         ];
     }

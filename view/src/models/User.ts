@@ -1,7 +1,7 @@
 import { Models } from '@/models/Models';
 import { Permissions } from '@/permissions/Permissions';
 export type Meta = {
-    id: string;
+    id: number;
     email: string;
     name: string;
     is_admin: boolean;
@@ -15,7 +15,7 @@ export interface User extends Models<Meta> {
  * @param meta User data
  */
 export class User extends Models<Meta> implements User {
-    public id?: string;
+    public id?: number;
     public email?: string;
     public name?: string;
     public is_admin?: boolean;
@@ -25,7 +25,7 @@ export class User extends Models<Meta> implements User {
      * @returns User
      */
     public static plane(  ) {
-        return new User( { id: ``, email: '', name: '', is_admin: false, password: '', } );
+        return new User( { id: 0, email: '', name: '', is_admin: false, password: '', } );
     }
     public hasPerm( perms: Permissions[] ) {
         return false;

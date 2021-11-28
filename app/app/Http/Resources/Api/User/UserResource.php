@@ -13,7 +13,9 @@ class UserResource extends JsonResource {
      * @return array|\Illuminate\Contracts\Support\Arrayable|\JsonSerializable
      */
     public function toArray( $request ) {
-        return parent::toArray( $request );
+        return array_merge( parent::toArray( $request ), [
+            'profile' => $this->resource->profile,
+        ] );
     }
 
     public static function create( \App\Models\User $user ) {

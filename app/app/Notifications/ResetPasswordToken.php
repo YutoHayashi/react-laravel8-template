@@ -7,9 +7,11 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class UserRegistered extends Notification {
+class ResetPasswordToken extends Notification {
 
     use Queueable;
+
+    protected $user;
 
     /**
      * Create a new notification instance.
@@ -37,10 +39,9 @@ class UserRegistered extends Notification {
      * @return \Illuminate\Notifications\Messages\MailMessage
      */
     public function toMail( $notifiable ) {
-        $url = env( 'APP_VIEWS_URL', 'http://localhost:8000' ).'/verification';
         return ( new MailMessage )
-            ->subject( 'Registration confirmation' )
-            ->markdown( 'mails.activate', compact( 'url', 'notifiable' ) );
+            ->subject( 'Resetting password' )
+            ->markdown( 'mails.reset_password', compact( 'notifiable' ) );
     }
 
     /**

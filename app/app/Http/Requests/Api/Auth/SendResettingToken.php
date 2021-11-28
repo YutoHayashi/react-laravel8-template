@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\Api\Role;
+namespace App\Http\Requests\Api\Auth;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreRequest extends FormRequest {
+class SendResettingToken extends FormRequest {
 
     use \App\Http\Requests\Traits\FailedValidation;
 
@@ -24,9 +24,9 @@ class StoreRequest extends FormRequest {
      */
     public function rules(  ) {
         return [
-            'name' => [
-                'required', 'unique:roles,name',
-            ],
+            'email' => [
+                'required', 'email',
+            ]
         ];
     }
 

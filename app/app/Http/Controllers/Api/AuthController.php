@@ -4,10 +4,11 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
+use Illuminate\Http\JsonResponse;
+use \App\Models\User;
 use \App\Http\Resources\Api\ResponseBody;
 use \App\Http\Resources\Api\Auth\TokenResource;
-use \App\Http\Resources\Api\Auth\UserResource;
+use \App\Http\Resources\Api\User\UserResource;
 use \Tymon\JWTAuth\Exceptions\JWTException;
 
 class AuthController extends Controller {
@@ -15,7 +16,7 @@ class AuthController extends Controller {
     /**
      * Get a JWT via given credentials.
      * @param \App\Http\Requests\Api\Auth\LoginRequest $request - Validated request object
-     * @return Response
+     * @return JsonResponse
      */
     public function login( \App\Http\Requests\Api\Auth\LoginRequest $request ) {
         $credentials = $request->validated(  );
@@ -39,7 +40,7 @@ class AuthController extends Controller {
 
     /**
      * Get the authenticated User.
-     * @return Response
+     * @return JsonResponse
      */
     public function me(  ) {
         return UserResource::create( auth(  )->user(  ) );
@@ -47,7 +48,7 @@ class AuthController extends Controller {
 
     /**
      * Refresh a token
-     * @return Response
+     * @return JsonResponse
      */
     public function refresh(  ) {
         try {
@@ -64,7 +65,7 @@ class AuthController extends Controller {
 
     /**
      * Log the user out (Invalidate the token)
-     * @return Response
+     * @return JsonResponse
      */
     public function logout(  ) {
         try {
@@ -78,6 +79,25 @@ class AuthController extends Controller {
                 'errors' => [ $e->getMessage(  ), ],
             ] );
         }
+    }
+
+    public function sendResettingToken( \App\Http\Requests\Api\Auth\SendResettingToken $request ) {
+        $email = $request->validated(  )[ 'email' ];
+        try {
+            User::where( 'email', $email )
+                ->firstOrFail(  )
+                ->notify( new \App\Notifications\ResetPasswordToken );
+            return ResponseBody::create( [  ] );
+        } catch( \Exception $e ) {
+            return ResponseBody::create( [
+                'code' => 400,
+                'errors' => [ $e->getMessage(  ), ],
+            ] );
+        }
+    }
+
+    public function applyResettingPassword( \App\Http\Requests\Api\Auth\ApplyResettingPassword $request ) {
+        $payload = $request->validated(  );
     }
 
 }

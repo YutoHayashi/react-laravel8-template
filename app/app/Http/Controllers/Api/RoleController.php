@@ -4,8 +4,8 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
-use Spatie\Permission\Models\Role;
+use Illuminate\Http\JsonResponse;
+use \App\Models\Role;
 use \App\Http\Resources\Api\ResponseBody;
 use \App\Http\Resources\Api\Role\RoleResource;
 use \App\Http\Resources\Api\Role\RoleResourceCollection;
@@ -14,7 +14,7 @@ class RoleController extends Controller {
 
     /**
      * Role index
-     * @return Response 
+     * @return JsonResponse 
      */
     public function index(  ) {
         try {
@@ -30,7 +30,7 @@ class RoleController extends Controller {
     /**
      * Store role.
      * @param \App\Http\Requests\Api\Role\StoreRequest $request - Validated request object.
-     * @return Reponse 
+     * @return JsonResponse 
      */
     public function store( \App\Http\Requests\Api\Role\StoreRequest $request ) {
         $payload = $request->validated(  );
@@ -50,13 +50,13 @@ class RoleController extends Controller {
      * Update role.
      * @param Role $role - Role object
      * @param \App\Http\Requests\Api\Role\UpdateRequest $request - Validated request object.
-     * @return Response 
+     * @return JsonResponse 
      */
-    public function update( Role $role, \App\Http\Requests\Api\Role\UpdateRequest $request ) {
+    public function update( \App\Http\Requests\Api\Role\UpdateRequest $request, Role $role ) {
         $payload = $request->validated(  );
         try {
             $role->update( $payload );
-            $role->syncPermissions( $request->get( 'permission' ) );
+            $role->syncPermissions( $request->get( 'permissions' ) );
             return RoleResource::create( $role );
         } catch( \Exception $e ) {
             return ResponseBody::create( [
@@ -69,7 +69,7 @@ class RoleController extends Controller {
     /**
      * Destroy role.
      * @param Role $role - Role object.
-     * @return Response  
+     * @return JsonResponse  
      */
     public function destroy( Role $role ) {
         try {
@@ -88,7 +88,7 @@ class RoleController extends Controller {
     /**
      * Retrieve role
      * @param Role $role - Role model
-     * @return Response 
+     * @return JsonResponse 
      */
     public function show( Role $role ) {
         return RoleResource::create( $role );

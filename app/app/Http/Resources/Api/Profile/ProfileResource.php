@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Resources\Api\Permission;
+namespace App\Http\Resources\Api\Profile;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class PermissionResource extends JsonResource {
+class ProfileResource extends JsonResource {
 
     /**
      * Transform the resource into an array.
@@ -16,11 +16,11 @@ class PermissionResource extends JsonResource {
         return parent::toArray( $request );
     }
 
-    public static function create( \App\Models\Permission $permission ) {
+    public static function create( \App\Models\Profile $profile ) {
         return \App\Http\Resources\Api\ResponseBody::create( [
             '_embedded' => [
-                'permission' => new PermissionResource( $permission ),
-            ],
+                'profile' => new ProfileResource( $profile )
+            ]
         ] );
     }
 

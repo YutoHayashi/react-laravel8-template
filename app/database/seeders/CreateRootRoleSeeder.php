@@ -12,7 +12,7 @@ class CreateRootRoleSeeder extends Seeder
      * @return void
      */
     public function run(  ) {
-        \Spatie\Permission\Models\Role::create( [
+        \App\Models\Role::create( [
             'name' => 'root',
         ] );
     }

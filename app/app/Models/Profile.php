@@ -8,21 +8,27 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Profile extends Model {
 
-    use HasFactory, SoftDeletes, \App\Models\Traits\UseUuidForPK;
+    use HasFactory,
+        SoftDeletes,
+        \App\Models\Traits\Stringable;
 
     protected $table = 'profiles';
 
-    protected $keyType = 'string';
-
     protected $fillable = [
-        'user_id',
+        'user_id', 'name',
     ];
 
-    protected $hidden = [];
+    protected $hidden = [
+        'user_id', 'deleted_at', 'created_at', 'updated_at',
+    ];
 
-    protected $casts = [];
+    protected $visible = [
+        'id', 'name',
+    ];
 
-    protected $dates = [];
+    protected $casts = [  ];
+
+    protected $dates = [  ];
 
     public static function create( User $user ) {
         return static::query(  )->create( [

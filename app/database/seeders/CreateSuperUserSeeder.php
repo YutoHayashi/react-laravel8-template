@@ -4,7 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 
-class CreateRootUserSeeder extends Seeder
+class CreateSuperUserSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -14,11 +14,10 @@ class CreateRootUserSeeder extends Seeder
     public function run(  ) {
         \Illuminate\Support\Facades\DB::transaction( function(  ) {
             $root = \App\Models\User::createSuper( [
-                'name' => 'root',
                 'email' => 'root@lvh.me',
                 'password' => 'password',
             ] );
-            $root_role = \Spatie\Permission\Models\Role::where( [ 'name' => 'root', ] )->first(  );
+            $root_role = \App\Models\Role::where( [ 'name' => 'root', ] )->first(  );
             $root->assignRole( [ $root_role->id ] );
         } );
     }
