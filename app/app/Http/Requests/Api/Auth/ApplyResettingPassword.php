@@ -24,6 +24,9 @@ class ApplyResettingPassword extends FormRequest {
      */
     public function rules(  ) {
         return [
+            'token' => [
+                'required', 'string',
+            ],
             'password' => [
                 'required', 'min:8', 'max:50',
             ],

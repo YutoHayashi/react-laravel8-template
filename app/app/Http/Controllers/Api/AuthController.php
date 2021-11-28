@@ -82,11 +82,9 @@ class AuthController extends Controller {
     }
 
     public function sendResettingToken( \App\Http\Requests\Api\Auth\SendResettingToken $request ) {
-        $email = $request->validated(  )[ 'email' ];
         try {
-            User::where( 'email', $email )
-                ->firstOrFail(  )
-                ->notify( new \App\Notifications\ResetPasswordToken );
+            $user = User::where( 'email', $request->validated(  )[ 'email' ] )->firstOrFail(  );
+            $user->notify( new \App\Notifications\ResetPasswordToken( \App\Models\PasswordReset::create( $user ) ) );
             return ResponseBody::create( [  ] );
         } catch( \Exception $e ) {
             return ResponseBody::create( [
@@ -98,6 +96,8 @@ class AuthController extends Controller {
 
     public function applyResettingPassword( \App\Http\Requests\Api\Auth\ApplyResettingPassword $request ) {
         $payload = $request->validated(  );
+        $email = $payload[ 'email' ];
+        $token = $payload[ 'token' ];
     }
 
 }
