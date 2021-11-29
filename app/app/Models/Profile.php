@@ -14,6 +14,8 @@ class Profile extends Model {
 
     protected $table = 'profiles';
 
+    protected $primaryKey = 'user_id';
+
     protected $fillable = [
         'user_id', 'name',
     ];

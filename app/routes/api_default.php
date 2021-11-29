@@ -9,6 +9,8 @@ Route::namespace( '\App\Http\Controllers\Api' )->group( function(  ) {
     Route::get( 'refresh', 'AuthController@refresh' )->name( 'refresh' );
     Route::post( 'register', 'UserController@store' )->name( 'register' );
     Route::get( 'verify', 'UserController@verify' )->name( 'verify' );
+    Route::post( 'send_password_reset', 'AuthController@sendResettingToken' )->name( 'send_password_reset' );
+    Route::post( 'password_reset', 'AuthController@resetPassword' )->name( 'password_reset' );
 
     // Authentication required
     // Route::group( [

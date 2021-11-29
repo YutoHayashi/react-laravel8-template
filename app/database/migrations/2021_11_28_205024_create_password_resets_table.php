@@ -13,10 +13,11 @@ class CreatePasswordResetsTable extends Migration {
      */
     public function up(  ) {
         Schema::create( 'password_resets', function ( Blueprint $table ) {
-            $table->foreignIdFor( User::class, 'user_id' )
+            $table->foreignIdFor( \App\Models\User::class, 'user_id' )
                 ->constrained(  )
                 ->cascadeOnDelete(  );
-            $table->unique( 'token' )
+            $table->uuid( 'token' )
+                ->unique(  )
                 ->comment( 'パスワードリセットトークン' );
         } );
     }

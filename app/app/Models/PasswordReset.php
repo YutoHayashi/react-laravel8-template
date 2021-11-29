@@ -7,9 +7,13 @@ use Illuminate\Database\Eloquent\Model;
 
 class PasswordReset extends Model {
 
+    protected $primaryKey = 'user_id';
+
     protected $fillable = [
         'user_id',
     ];
+
+    public $timestamps = false;
 
     public static function boot(  ) {
         parent::boot(  );
@@ -20,8 +24,12 @@ class PasswordReset extends Model {
 
     public static function create( User $user ) {
         return static::query(  )->create( [
-            'uesr_id' => "$user",
+            'user_id' => "$user",
         ] );
+    }
+
+    public function user(  ) {
+        return $this->belongsTo( User::class );
     }
 
 }

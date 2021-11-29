@@ -13,7 +13,6 @@ class CreateProfilesTable extends Migration
      */
     public function up(  ) {
         Schema::create( 'profiles', function ( Blueprint $table ) {
-            $table->id(  );
             $table->foreignIdFor( \App\Models\User::class, 'user_id' )
                 ->constrained(  )
                 ->cascadeOnUpdate(  )

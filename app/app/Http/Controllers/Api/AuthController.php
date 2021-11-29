@@ -81,6 +81,11 @@ class AuthController extends Controller {
         }
     }
 
+    /**
+     * Send password reset email
+     * @param \App\Http\Requests\Api\Auth\SendResettingToken $request
+     * @return JsonResponse 
+     */
     public function sendResettingToken( \App\Http\Requests\Api\Auth\SendResettingToken $request ) {
         try {
             $user = User::where( 'email', $request->validated(  )[ 'email' ] )->firstOrFail(  );
@@ -94,10 +99,30 @@ class AuthController extends Controller {
         }
     }
 
-    public function applyResettingPassword( \App\Http\Requests\Api\Auth\ApplyResettingPassword $request ) {
+    /**
+     * Reset password
+     * @param \App\Http\Requests\Api\Auth\ResetPassword $request 
+     * @return JsonResponse 
+     */
+    public function resetPassword( \App\Http\Requests\Api\Auth\ResetPassword $request ) {
         $payload = $request->validated(  );
-        $email = $payload[ 'email' ];
+        $password = $payload[ 'password' ];
         $token = $payload[ 'token' ];
+        try {
+            $password_reset = \App\Models\PasswordReset::where( 'token', $token )->firstOrFail(  );
+            \Illuminate\Support\Facades\DB::transaction( function (  ) use ( $password_reset, $password ) {
+                if ( $password_reset->user->update( compact( 'password' ) ) ) {
+                    $password_reset->user->notify( new \App\Notifications\PasswordReset );
+                    $password_reset->delete(  );
+                }
+            } );
+            return ResponseBody::create( [  ] );
+        } catch( \Exception $e ) {
+            return ResponseBody::create( [
+                'code' => 400,
+                'errors' => [ $e->getMessage(  ), ],
+            ] );
+        }
     }
 
 }

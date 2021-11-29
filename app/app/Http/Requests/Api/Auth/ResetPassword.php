@@ -4,7 +4,7 @@ namespace App\Http\Requests\Api\Auth;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class ApplyResettingPassword extends FormRequest {
+class ResetPassword extends FormRequest {
 
     use \App\Http\Requests\Traits\FailedValidation;
 
