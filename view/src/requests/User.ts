@@ -123,3 +123,19 @@ async ( { user, token, } ) => {
     )
         .then( response => new User( response.data.data._embedded.user ) );
 };
+/**
+ * Verify user email
+ * @param param0 email verification token
+ * @returns void
+ * @example
+ * ```ts
+ * verify( { email_verification_token } );
+ * ```
+ */
+export const verify: ( payload: { email_verification_token: string } ) => Promise<void> =
+async ( { email_verification_token } ) => {
+    return instance.get<ResponseBody>(
+        `/verify?email_verification_token=${ email_verification_token }`,
+    )
+        .then( response => undefined );
+};

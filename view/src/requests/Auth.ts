@@ -10,11 +10,12 @@ import { ResponseBody, TokenResource } from '@/responses/types';
  *  const token = await login( { email, password } );
  * ```
  */
-export const login: ( params: Pick<Meta, 'email'> & { password: string; } ) => Promise<{ token: string; }> = params => {
+export const login: ( params: Pick<Meta, 'email'> & { password: string; } ) => Promise<{ token: string; }> =
+async params => {
     const data = new FormData(  );
     ( Object.keys( params ) as ( keyof typeof params )[] ).forEach( k => data.append( k, params[ k ] ) );
     return instance.post<ResponseBody<TokenResource>>(
-        '/login',
+        `/login`,
         data,
     )
         .then( response => {
@@ -29,9 +30,10 @@ export const login: ( params: Pick<Meta, 'email'> & { password: string; } ) => P
  * @param param0 Json Web Token
  * @returns User
  */
-export const me: ( params: { token: string } ) => Promise<User> = ( { token } ) => {
+export const me: ( params: { token: string } ) => Promise<User> =
+async ( { token } ) => {
     return instance.get<ResponseBody<{ user: Meta; }>>(
-        '/me',
+        `/me`,
         {
             headers: {
                 ...Credentials( { token, } ),
@@ -45,9 +47,10 @@ export const me: ( params: { token: string } ) => Promise<User> = ( { token } ) 
  * @param param0 Json Web Token
  * @returns TokenResource
  */
-export const refresh: ( params: { token: string } ) => Promise<{ token: string }> = ( { token } ) => {
+export const refresh: ( params: { token: string } ) => Promise<{ token: string }> =
+async ( { token } ) => {
     return instance.get<ResponseBody<TokenResource>>(
-        '/refresh',
+        `/refresh`,
         {
             headers: {
                 ...Credentials( { token, } ),
@@ -70,15 +73,47 @@ export const refresh: ( params: { token: string } ) => Promise<{ token: string }
  * logout( { token } )
  * ```
  */
-export const logout: ( params: { token: string; } ) => Promise<void> = ( { token } ) => {
+export const logout: ( params: { token: string; } ) => Promise<void> =
+async ( { token } ) => {
     return instance.post<ResponseBody>(
-        '/logout',
+        `/logout`,
         undefined,
         {
             headers: {
                 ...Credentials( { token } ),
             },
         },
+    )
+        .then( response => undefined );
+};
+/**
+ * Send an email to reset password
+ * @param param0 email address
+ * @returns void
+ */
+export const sendResettingToken: ( params: Pick<Meta, 'email'> ) => Promise<void> =
+async ( { email = '' } ) => {
+    const data = new FormData(  );
+    data.append( 'email', email );
+    return instance.post<ResponseBody>(
+        `/send_password_reset`,
+        data,
+    )
+        .then( response => undefined );
+};
+/**
+ * Reset password
+ * @param param0 password / token 
+ * @returns void 
+ */
+export const resetPassword: ( params: Pick<Meta, 'password'> & { token: string } ) => Promise<void> =
+async ( { token, password = '' } ) => {
+    const data = new FormData(  );
+    data.append( 'password', password );
+    data.append( 'token', token );
+    return instance.post<ResponseBody>(
+        `/password_reset`,
+        data,
     )
         .then( response => undefined );
 };

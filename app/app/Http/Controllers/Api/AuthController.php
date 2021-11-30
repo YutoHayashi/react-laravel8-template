@@ -19,9 +19,8 @@ class AuthController extends Controller {
      * @return JsonResponse
      */
     public function login( \App\Http\Requests\Api\Auth\LoginRequest $request ) {
-        $credentials = $request->validated(  );
         try {
-            if ( ! $token = auth(  )->attempt( $credentials ) ) {
+            if ( ! $token = auth(  )->attempt( $request->validated(  ) ) ) {
                 return ResponseBody::create( [
                     'code' => 401,
                     'errors' => [ 'Unauthorized.', ],

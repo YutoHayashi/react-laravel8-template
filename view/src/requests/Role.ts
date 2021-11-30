@@ -6,8 +6,8 @@ import { ResponseBody } from '@/responses/types';
  * @param param0 Json Web Token
  * @returns Roles
  */
-export const fetch: ( params: { token: string } ) => Promise<Array<Role>> =
-( { token } ) => {
+export const fetch: ( token: string ) => Promise<Array<Role>> =
+async token => {
     return instance.get<ResponseBody<{ roles: Array<Meta> }>>(
         '/roles',
         {
@@ -24,7 +24,7 @@ export const fetch: ( params: { token: string } ) => Promise<Array<Role>> =
  * @returns New role
  */
 export const save: ( role: Role, token: string ) => Promise<Role> =
-( role, token ) => {
+async ( role, token ) => {
     const data = new FormData(  );
     const params = role.parameters<Meta>( [ 'id', 'name', 'guard_name' ] );
     ( Object.keys( params ) as ( keyof typeof params )[] ).forEach( k => data.append( `${ k }`, `${ params[ k ] }` ) );
@@ -44,7 +44,8 @@ export const save: ( role: Role, token: string ) => Promise<Role> =
  * @param params Role parameter and JWT
  * @returns Updated role
  */
-export const update: ( role: Role, token: string ) => Promise<Role> = ( role, token ) => {
+export const update: ( role: Role, token: string ) => Promise<Role> =
+async ( role, token ) => {
     const data = new FormData(  );
     const params = role.parameters<Meta>( [ 'id', 'name', 'guard_name' ] );
     ( Object.keys( params ) as ( keyof typeof params )[] ).forEach( k => data.append( `${ k }`, `${ params[ k ] }` ) );
@@ -64,8 +65,8 @@ export const update: ( role: Role, token: string ) => Promise<Role> = ( role, to
  * @param params Role id and JWT
  * @returns 
  */
-export const destroy: ( role: Role, token: string ) => Promise<void> = ( role, token ) => {
-    const id = role.parameters<Pick<Meta, 'id'>>( [ 'id' ] ).id;
+export const destroy: ( role: Role, token: string ) => Promise<void> =
+async ( { id }, token ) => {
     return instance.delete<ResponseBody>(
         `/roles/${ id }`,
         {

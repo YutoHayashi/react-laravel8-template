@@ -6,8 +6,8 @@ import { ResponseBody } from '@/responses/types';
  * @param param0 Json Web Token
  * @returns permissions
  */
-export const index: ( params: { token: string } ) => Promise<Array<Permission>> =
-( { token } ) => {
+export const index: ( token: string ) => Promise<Array<Permission>> =
+async token => {
     return instance.get<ResponseBody<{ permissions: Array<Meta> }>>(
         '/permissions',
         {
@@ -24,7 +24,7 @@ export const index: ( params: { token: string } ) => Promise<Array<Permission>> 
  * @returns New permission
  */
 export const save: ( permission: Permission, token: string ) => Promise<Permission> =
-( permission, token ) => {
+async ( permission, token ) => {
     const data = new FormData(  );
     const params = permission.parameters<Meta>( [ 'id', 'name', 'guard_name' ] );
     ( Object.keys( params ) as ( keyof typeof params )[] ).forEach( k => data.append( `${ k }`, `${ params[ k ] }` ) );
@@ -45,7 +45,7 @@ export const save: ( permission: Permission, token: string ) => Promise<Permissi
  * @returns Updated permission
  */
 export const update: ( permission: Permission, token : string ) => Promise<Permission> =
-( permission, token ) => {
+async ( permission, token ) => {
     const data = new FormData(  );
     const params = permission.parameters<Meta>( [ 'id', 'name', 'guard_name' ] );
     ( Object.keys( params ) as ( keyof typeof params )[] ).forEach( k => data.append( `${ k }`, `${ params[ k ] }` ) );
@@ -65,9 +65,8 @@ export const update: ( permission: Permission, token : string ) => Promise<Permi
  * @param params Permission's id and JWT
  * @returns nothing
  */
-export const destroy: ( params: Permission & { token: string; } ) => Promise<void> =
-params => {
-    const { token, id } = params;
+export const destroy: ( params: Permission, token: string ) => Promise<void> =
+async ( { id }, token ) => {
     return instance.delete<ResponseBody>(
         `/permissions/${ id }`,
         {
