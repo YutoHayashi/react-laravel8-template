@@ -13,17 +13,17 @@ Route::namespace( '\App\Http\Controllers\Api' )->group( function(  ) {
     Route::post( 'password_reset', 'AuthController@resetPassword' )->name( 'password_reset' );
 
     // Authentication required
-    Route::group( [
-        'middleware' => [ 'jwt.auth' ],
-    ], function(  ) {
+    // Route::group( [
+    //     'middleware' => [ 'jwt.auth' ],
+    // ], function(  ) {
 
         Route::post( 'logout', 'AuthController@logout' )->name( 'logout' );
         Route::get( 'me', 'AuthController@me' )->name( 'me' );
 
         // Permission required
-        Route::group( [
-            'middleware' => [ 'permission' ],
-        ], function(  ) {
+        // Route::group( [
+        //     'middleware' => [ 'permission' ],
+        // ], function(  ) {
 
             // Roles / Permissions
             Route::resource( 'roles', 'RoleController' )->only( [ 'index', 'store', 'update', 'destroy', 'show', ] );
@@ -45,8 +45,8 @@ Route::namespace( '\App\Http\Controllers\Api' )->group( function(  ) {
                 //
             } );
 
-        } );
+        // } );
 
-    } );
+    // } );
 
 } );

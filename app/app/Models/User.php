@@ -31,7 +31,7 @@ class User extends Authenticatable implements JWTSubject {
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password', 'is_root', 'email_verified_at',
+        'name', 'email', 'password', 'is_admin', 'is_root', 'email_verified_at',
     ];
 
     /**
@@ -95,6 +95,17 @@ class User extends Authenticatable implements JWTSubject {
         return static::query(  )->create(
             $attributes + [
                 'is_root' => true,
+            ]
+        );
+    }
+
+    /**
+     * Create admin user
+     */
+    public static function createAdmin( Array $attributes ) {
+        return static::query(  )->create(
+            $attributes + [
+                'is_admin' => true,
             ]
         );
     }
