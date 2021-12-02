@@ -2,13 +2,10 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\ApiController as Controller;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use \App\Models\User;
-use \App\Http\Resources\Api\ResponseBody;
-use \App\Http\Resources\Api\Auth\TokenResource;
-use \App\Http\Resources\Api\User\UserResource;
 use \Tymon\JWTAuth\Exceptions\JWTException;
 
 class AuthController extends Controller {
@@ -21,20 +18,12 @@ class AuthController extends Controller {
     public function login( \App\Http\Requests\Api\Auth\LoginRequest $request ) {
         try {
             if ( ! $token = auth(  )->attempt( $request->validated(  ) ) ) {
-                return ResponseBody::create( [
-                    'code' => 401,
-                    'errors' => [ 'Unauthorized.', ],
-                ] );
+                return $this->errorResponse( [ 'Unauthorized.', ], 401 );
             }
         } catch( JWTException $e ) {
-            return ResponseBody::create( [
-                'code' => 500,
-                'errors' => [ 'Could not create token.' ],
-            ] );
+            return $this->errorResponse( [ 'Could not create token.' ], 500 );
         }
-        return TokenResource::create( [
-            'token' => $token,
-        ] );
+        return $this->authTokenResponse( $token );
     }
 
     /**
@@ -42,7 +31,7 @@ class AuthController extends Controller {
      * @return JsonResponse
      */
     public function me(  ) {
-        return UserResource::create( auth(  )->user(  ) );
+        $this->userResponse( auth(  )->user(  ) );
     }
 
     /**
@@ -51,14 +40,9 @@ class AuthController extends Controller {
      */
     public function refresh(  ) {
         try {
-            return TokenResource::create( [
-                'token' => auth(  )->refresh(  ),
-            ] );
+            return $this->authTokenResponse( auth(  )->refresh(  ) );
         } catch( JWTException $e ) {
-            return ResponseBody::create( [
-                'code' => 401,
-                'errors' => [ 'Unauthorized.', ],
-            ] );
+            return $this->errorResponse( [ 'Unauthorized.', ], 401 );
         }
     }
 
@@ -69,14 +53,9 @@ class AuthController extends Controller {
     public function logout(  ) {
         try {
             auth(  )->logout(  );
-            return ResponseBody::create( [
-                'messages' => [ 'Successfully logged out.' ],
-            ] );
-        } catch( \Exception $e ) {
-            return ResponseBody::create( [
-                'code' => 400,
-                'errors' => [ $e->getMessage(  ), ],
-            ] );
+            return $this->successResponse(  );
+        } catch( \Throwable $e ) {
+            return $this->errorResponse( [ $e->getMessage(  ), ], 400 );
         }
     }
 
@@ -89,12 +68,9 @@ class AuthController extends Controller {
         try {
             $user = User::where( 'email', $request->validated(  )[ 'email' ] )->firstOrFail(  );
             $user->notify( new \App\Notifications\ResetPasswordToken( \App\Models\PasswordReset::create( $user ) ) );
-            return ResponseBody::create( [  ] );
-        } catch( \Exception $e ) {
-            return ResponseBody::create( [
-                'code' => 400,
-                'errors' => [ $e->getMessage(  ), ],
-            ] );
+            return $this->successResponse(  );
+        } catch( \Throwable $e ) {
+            return $this->errorResponse( [ $e->getMessage(  ), ], 400 );
         }
     }
 
@@ -115,12 +91,9 @@ class AuthController extends Controller {
                     $password_reset->delete(  );
                 }
             } );
-            return ResponseBody::create( [  ] );
-        } catch( \Exception $e ) {
-            return ResponseBody::create( [
-                'code' => 400,
-                'errors' => [ $e->getMessage(  ), ],
-            ] );
+            return $this->successResponse(  );
+        } catch( \Throwable $e ) {
+            return $this->errorResponse( [ $e->getMessage(  ), ], 400 );
         }
     }
 

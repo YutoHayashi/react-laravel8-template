@@ -28,11 +28,4 @@ class ResponseBody extends JsonResource
         ];
     }
 
-    public static function create( $request ) {
-        $response_body = new ResponseBody( $request );
-        return $response_body
-            ->response(  )
-            ->setStatusCode( $response_body->code );
-    }
-
 }

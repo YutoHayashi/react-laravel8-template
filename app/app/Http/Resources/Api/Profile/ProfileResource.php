@@ -16,12 +16,4 @@ class ProfileResource extends JsonResource {
         return parent::toArray( $request );
     }
 
-    public static function create( \App\Models\Profile $profile ) {
-        return \App\Http\Resources\Api\ResponseBody::create( [
-            '_embedded' => [
-                'profile' => new ProfileResource( $profile )
-            ]
-        ] );
-    }
-
 }

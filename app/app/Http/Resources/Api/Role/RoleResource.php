@@ -19,12 +19,4 @@ class RoleResource extends JsonResource {
         ] );
     }
 
-    public static function create( \App\Models\Role $role ) {
-        return \App\Http\Resources\Api\ResponseBody::create( [
-            '_embedded' => [
-                'role' => new RoleResource( $role ),
-            ],
-        ] );
-    }
-
 }

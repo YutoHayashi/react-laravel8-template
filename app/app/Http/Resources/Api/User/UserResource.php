@@ -18,12 +18,4 @@ class UserResource extends JsonResource {
         ] );
     }
 
-    public static function create( \App\Models\User $user ) {
-        return \App\Http\Resources\Api\ResponseBody::create( [
-            '_embedded' => [
-                'user' => new UserResource( $user ),
-            ],
-        ] );
-    }
-
 }

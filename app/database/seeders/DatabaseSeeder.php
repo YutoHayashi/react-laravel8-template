@@ -13,6 +13,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run(  ) {
         $this->call( CreateSuperRoleSeeder::class );
+        $this->call( CreateAdminRoleSeeder::class );
         $this->call( CreateSuperUserSeeder::class );
         $this->call( CreateAdminUserSeeder::class );
     }

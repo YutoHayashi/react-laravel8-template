@@ -2,12 +2,10 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\ApiController as Controller;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use \App\Models\Profile;
-use \App\Http\Resources\Api\ResponseBody;
-use \App\Http\Resources\Api\Profile\ProfileResource;
 
 class ProfileController extends Controller {
 
@@ -20,12 +18,9 @@ class ProfileController extends Controller {
     public function update( \App\Http\Requests\Api\Profile\UpdateRequest $request, Profile $profile ) {
         try {
             $profile->update( $request->validated(  ) );
-            return ProfileResource::create( $profile );
-        } catch( \Exception $e ) {
-            return ResponseBody::create( [
-                'code' => 400,
-                'errors' => [ $e->getMessage(  ), ],
-            ] );
+            return $this->profileResponse( $profile );
+        } catch( \Throwable $e ) {
+            return $this->errorResponse( [ $e->getMessage(  ), ], 400 );
         }
     }
 

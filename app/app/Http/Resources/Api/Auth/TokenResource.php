@@ -19,10 +19,4 @@ class TokenResource extends JsonResource {
             'expires_in' => ( auth(  )->factory(  )->getTTL(  ) * 60 ),
         ];
     }
-
-    public static function create( $request ) {
-        return \App\Http\Resources\Api\ResponseBody::create( [
-            '_embedded' => new TokenResource( $request ),
-        ] );
-    }
 }

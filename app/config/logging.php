@@ -17,7 +17,14 @@ return [
     |
     */
 
-    'default' => env('LOG_CHANNEL', 'stack'),
+    // 'default' => env( 'LOG_CHANNEL', 'stack' ), // [マルチチャンネル]チャンネルの作成を容易にするドライバ
+    // 'default' => env('LOG_CHANNEL', 'daily' ), // 日ごとにファイルを切り替える
+    // 'default' => env( 'LOG_CHANNEL', 'errorlog' ), // ErrorLogHandlerベースのMonologドライバ
+    'default' => env( 'LOG_CHANNEL', 'null' ), // 全てのログメッセージを破棄
+    // 'default' => env( 'LOG_CHANNEL', 'papertrail' ), // SyslogUdpHandlerベースのMonologドライバ
+    // 'default' => env( 'LOG_CHANNEL', 'single' ), // 単一のファイルまたはパスベースのロガーチャンネル(StreamHandler)
+    // 'default' => env( 'LOG_CHANNEL', 'slack' ), // SlackWebhookHandlerベースMonologドライバ
+    // 'default' => env( 'LOG_CHANNEL', 'syslog' ), // SyslogHandlerベースのMonologドライバ
 
     /*
     |--------------------------------------------------------------------------

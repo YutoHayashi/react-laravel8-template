@@ -2,13 +2,10 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\ApiController as Controller;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use \App\Models\Role;
-use \App\Http\Resources\Api\ResponseBody;
-use \App\Http\Resources\Api\Role\RoleResource;
-use \App\Http\Resources\Api\Role\RoleResourceCollection;
 
 class RoleController extends Controller {
 
@@ -18,12 +15,9 @@ class RoleController extends Controller {
      */
     public function index(  ) {
         try {
-            return RoleResourceCollection::create( Role::take( 10 )->get(  ) );
-        } catch( \Exception $e ) {
-            return ResponseBody::create( [
-                'code' => 400,
-                'errors' => [ $e->getMessage(  ) ],
-            ] );
+            return $this->rolesResponse( Role::take( 10 )->get(  ) );
+        } catch( \Throwable $e ) {
+            return $this->errorResponse( [ $e->getMessage(  ), ], 400 );
         }
     }
 
@@ -37,12 +31,9 @@ class RoleController extends Controller {
         try {
             $role = Role::create( $payload );
             $role->syncPermissions( $request->get( 'permission' ) );
-            return RoleResource::create( $role );
-        } catch( \Exception $e ) {
-            return ResponseBody::create( [
-                'code' => 400,
-                'errors' => [ $e->getMessage(  ), ],
-            ] );
+            return $this->roleResponse( $role );
+        } catch( \Throwable $e ) {
+            return $this->errorResponse( [ $e->getMessage(  ), ], 400 );
         }
     }
 
@@ -57,12 +48,9 @@ class RoleController extends Controller {
         try {
             $role->update( $payload );
             $role->syncPermissions( $request->get( 'permissions' ) );
-            return RoleResource::create( $role );
-        } catch( \Exception $e ) {
-            return ResponseBody::create( [
-                'code' => 400,
-                'errors' => [ $e->getMessage(  ), ],
-            ] );
+            return $this->roleResponse( $role );
+        } catch( \Throwable $e ) {
+            return $this->errorResponse( [ $e->getMessage(  ), ], 400 );
         }
     }
 
@@ -74,14 +62,9 @@ class RoleController extends Controller {
     public function destroy( Role $role ) {
         try {
             $role->delete(  );
-            return ResponseBody::create( [
-                'code' => 200,
-            ] );
-        } catch( \Exception $e ) {
-            return ResponseBody::create( [
-                'code' => 400,
-                'errors' => [ $e->getMessage(  ), ],
-            ] );
+            return $this->successResponse(  );
+        } catch( \Throwable $e ) {
+            return $this->errorResponse( [ $e->getMessage(  ), ], 400 );
         }
     }
 
@@ -91,7 +74,7 @@ class RoleController extends Controller {
      * @return JsonResponse 
      */
     public function show( Role $role ) {
-        return RoleResource::create( $role );
+        return $this->roleResponse( $role );
     }
 
 }

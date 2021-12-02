@@ -45,12 +45,12 @@ class CreateRoutePermissionsCommand extends Command
                     ] ) );
                 }
             }
-            $this->_assignPermission( $permissions );
+            $this->_assignPermissionToSuperUser( $permissions );
         } );
         return Command::SUCCESS;
     }
 
-    private function _assignPermission( $permissions ) {
+    private function _assignPermissionToSuperUser( $permissions ) {
         if ( ! ( is_null( $root_role = \App\Models\Role::where( 'name', 'root' )->first(  ) ) ) && count( $permissions ) > 0 ) {
             $root_role->syncPermissions( array_map( function( $permission ) {
                 return $permission->id;

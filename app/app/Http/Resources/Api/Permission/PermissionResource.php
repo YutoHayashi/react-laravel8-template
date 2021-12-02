@@ -16,12 +16,4 @@ class PermissionResource extends JsonResource {
         return parent::toArray( $request );
     }
 
-    public static function create( \App\Models\Permission $permission ) {
-        return \App\Http\Resources\Api\ResponseBody::create( [
-            '_embedded' => [
-                'permission' => new PermissionResource( $permission ),
-            ],
-        ] );
-    }
-
 }

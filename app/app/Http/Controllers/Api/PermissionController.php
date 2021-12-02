@@ -2,13 +2,10 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\ApiController as Controller;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use \App\Models\Permission;
-use \App\Http\Resources\Api\ResponseBody;
-use \App\Http\Resources\Api\Permission\PermissionResource;
-use \App\Http\Resources\Api\Permission\PermissionResourceCollection;
 
 class PermissionController extends Controller {
 
@@ -18,12 +15,9 @@ class PermissionController extends Controller {
      */
     public function index(  ) {
         try {
-            return PermissionResourceCollection::create( Permission::take( 10 )->get(  ) );
-        } catch( \Exception $e ) {
-            return ResponseBody::create( [
-                'code' => 400,
-                'errors' => [ $e->getMessage(  ), ],
-            ] );
+            return $this->permissionsResponse( Permission::take( 10 )->get(  ) );
+        } catch( \Throwable $e ) {
+            return $this->errorResponse( [ $e->getMessage(  ), ], 400 );
         }
     }
 
@@ -33,7 +27,7 @@ class PermissionController extends Controller {
      * @return JsonResponse 
      */
     public function show( Permission $permission ) {
-        return PermissionResource::create( $permission );
+        return $this->permissionResponse( $permission );
     }
 
     /**
@@ -42,7 +36,7 @@ class PermissionController extends Controller {
      */
     public function store(  ) {
         \Illuminate\Support\Facades\Artisan::call( 'permission:create-permission-routes' );
-        return ResponseBody::create( [  ] );
+        return $this->successResponse(  );
     }
 
 }

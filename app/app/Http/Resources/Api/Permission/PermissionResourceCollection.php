@@ -18,12 +18,4 @@ class PermissionResourceCollection extends ResourceCollection {
         } )->all(  );
     }
 
-    public static function create( \Illuminate\Database\Eloquent\Collection $permissions ) {
-        return \App\Http\Resources\Api\ResponseBody::create( [
-            '_embedded' => [
-                'permissions' => new PermissionResourceCollection( $permissions ),
-            ],
-        ] );
-    }
-
 }

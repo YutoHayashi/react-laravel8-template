@@ -19,12 +19,4 @@ class UserResourceCollection extends ResourceCollection
         } )->all(  );
     }
 
-    public static function create( \Illuminate\Database\Eloquent\Collection $users ) {
-        return \App\Http\Resources\Api\ResponseBody::create( [
-            '_embedded' => [
-                'users' => new UserResourceCollection( $users ),
-            ],
-        ] );
-    }
-
 }

@@ -18,12 +18,4 @@ class RoleResourceCollection extends ResourceCollection {
         } );
     }
 
-    public static function create( \Illuminate\Database\Eloquent\Collection $roles ) {
-        return \App\Http\Resources\Api\ResponseBody::create( [
-            '_embedded' => [
-                'roles' => new RoleResourceCollection( $roles ),
-            ],
-        ] );
-    }
-
 }

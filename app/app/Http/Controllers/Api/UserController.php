@@ -1,13 +1,11 @@
 <?php
 
 namespace App\Http\Controllers\Api;
-use App\Http\Controllers\Controller;
+
+use App\Http\Controllers\ApiController as Controller;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use \App\Models\User;
-use \App\Http\Resources\Api\ResponseBody;
-use \App\Http\Resources\Api\User\UserResource;
-use \App\Http\Resources\Api\User\UserResourceCollection;
 
 class UserController extends Controller {
 
@@ -17,12 +15,9 @@ class UserController extends Controller {
      */
     public function index(  ) {
         try {
-            return UserResourceCollection::create( User::take( 10 )->get(  ) );
+            return $this->usersResponse( User::take( 10 )->get(  ) );
         } catch( \Exception $e ) {
-            return ResponseBody::create( [
-                'code' => 400,
-                'errors' => [ $e->getMessage(  ), ],
-            ] );
+            return $this->errorResponse( [ $e->getMessage(  ) ], 400 );
         }
     }
 
@@ -34,12 +29,9 @@ class UserController extends Controller {
     public function store( \App\Http\Requests\Api\User\StoreRequest $request ) {
         $payload = $request->validated(  );
         try {
-            return UserResource::create( User::createBase( $payload ) );
-        } catch ( \Exception $e ) {
-            return ResponseBody::create( [
-                'code' => 400,
-                'errors' => [ $e->getMessage(  ), ],
-            ] );
+            return $this->userResponse( User::createBase( $payload ) );
+        } catch ( \Throwable $e ) {
+            return $this->errorResponse( [ $e->getMessage(  ), ], 400 );
         }
     }
 
@@ -53,12 +45,9 @@ class UserController extends Controller {
         $payload = $request->validated(  );
         try {
             $user->update( $payload );
-            return UserResource::create( $user );
-        } catch( \Exception $e ) {
-            return ResponseBody::create( [
-                'code' => 400,
-                'errors' => [ $e->getMessage(  ), ],
-            ] );
+            return $this->userResponse( $user );
+        } catch( \Throwable $e ) {
+            return $this->errorResponse( [ $e->getMessage(  ), ], 400 );
         }
     }
 
@@ -70,14 +59,9 @@ class UserController extends Controller {
     public function destroy( User $user ) {
         try {
             $user->delete(  );
-            return ResponseBody::create( [
-                'code' => 200,
-            ] );
-        } catch( \Exception $e ) {
-            return ResponseBody::create( [
-                'code' => 400,
-                'errors' => [ $e->getMessage(  ), ],
-            ] );
+            return $this->successResponse(  );
+        } catch( \Throwable $e ) {
+            return $this->errorResponse( [ $e->getMessage(  ), ], 400 );
         }
     }
 
@@ -87,7 +71,7 @@ class UserController extends Controller {
      * @return JsonResponse 
      */
     public function show( User $user ) {
-        return UserResource::create( $user );
+        return $this->userResponse( $user );
     }
 
     /**
@@ -98,12 +82,9 @@ class UserController extends Controller {
     public function restore( User $user ) {
         try {
             $user->restore(  );
-            return UserResource::create( $user );
-        } catch( \Exception $e ) {
-            return ResponseBody::create( [
-                'code' => 400,
-                'errors' => [ $e->getMessage(  ), ],
-            ] );
+            return $this->userResponse( $user );
+        } catch( \Throwable $e ) {
+            return $this->errorResponse( [ $e->getMessage(  ), ], 400 );
         }
     }
 
@@ -120,11 +101,9 @@ class UserController extends Controller {
                     'email_verified_at' => \Carbon\Carbon::now(  ),
                 ] )
         ) {
-            return ResponseBody::create( [  ] );
+            return $this->successResponse(  );
         } else {
-            return ResponseBody::create( [
-                'code' => 400,
-            ] );
+            return $this->errorResponse( [  ], 400 );
         }
     }
 

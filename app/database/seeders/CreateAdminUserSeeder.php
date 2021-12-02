@@ -13,12 +13,12 @@ class CreateAdminUserSeeder extends Seeder
      */
     public function run(  ) {
         \Illuminate\Support\Facades\DB::transaction( function(  ) {
-            $administrator = \App\Models\User::createAdmin( [
-                'email' => 'administrator@lvh.me',
+            $admin = \App\Models\User::createAdmin( [
+                'email' => 'admin@lvh.me',
                 'password' => 'password',
             ] );
-            $admin_role = \App\Models\Role::where( [ 'name' => 'administrator' ] )->first(  );
-            $administrator->assignRole( [ $admin_role->id ] );
+            $admin_role = \App\Models\Role::where( [ 'name' => 'admin' ] )->first(  );
+            $admin->assignRole( [ $admin_role->id ] );
         } );
     }
 }
