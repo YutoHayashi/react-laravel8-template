@@ -1,7 +1,7 @@
 import React from 'react';
 import { Admin } from '@/components/layouts/Admin';
 import { Btn } from '@/components/molecules/Btn';
-import { AuthManager } from '@/middleware/Auth';
+import { AuthManager } from '@/services/Auth';
 import { Redirect } from 'react-router';
 export const Layout: React.FC<{}> = ( { children } ) => {
     return (

@@ -75,7 +75,7 @@ const check = (  ) => {
 const init: States = { isAuthenticated: false, token: '', me: User.plane(  ), login, logout, check, };
 export const AuthContext = React.createContext<States>( init );
 /**
- * Provide authentication middleware.
+ * Provide authentication service.
  * @param param0 Child react node
  * @returns AuthProvider
  */
@@ -85,7 +85,7 @@ export const AuthProvider: React.FC<Props> = ( { children } ) => {
     return <AuthContext.Provider value={ state } { ...{ children, } } />;
 };
 /**
- * Manage authentication middleware.
+ * Manage authentication service.
  * @param param0 Child react node
  * @returns AuthManager
  */

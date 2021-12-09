@@ -1,7 +1,7 @@
 import React from 'react';
 import { Admin } from '@/components/layouts/Admin';
 import { Btn, Handler as BtnHandler } from '@/components/molecules/Btn';
-import { AuthManager } from '@/middleware/Auth';
+import { AuthManager } from '@/services/Auth';
 import { Redirect } from 'react-router';
 const btn: React.Ref<BtnHandler> = React.createRef(  );
 const email: React.Ref<HTMLInputElement> = React.createRef(  );

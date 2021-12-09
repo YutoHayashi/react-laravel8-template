@@ -1,6 +1,6 @@
 import React from 'react';
 import { Redirect } from 'react-router';
-import { AuthManager } from '@/middleware/Auth';
+import { AuthManager } from '@/services/Auth';
 export const Logout: React.VFC<{}> = ( {  } ) => {
     return (
         <AuthManager>

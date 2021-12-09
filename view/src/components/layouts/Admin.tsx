@@ -1,5 +1,5 @@
 import React from 'react';
-import { AuthManager } from '@/middleware/Auth';
+import { AuthManager } from '@/services/Auth';
 import { Link } from 'react-router-dom';
 import { Mdi } from '@/components/atoms/Mdi';
 import { Btn, Handler } from '@/components/molecules/Btn';

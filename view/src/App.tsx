@@ -1,12 +1,12 @@
 import React from 'react'
-import { MiddlewareProvider } from './middleware';
+import { MiddlewareProvider } from './services';
 import { ReactRouter, ReactRouterView } from './ReactRouter';
 export const App: React.FC<{}> = ( {  } ) => {
     return (
-        <MiddlewareProvider>
-            <ReactRouter>
+        <ReactRouter>
+            <MiddlewareProvider>
                 <ReactRouterView />
-            </ReactRouter>
-        </MiddlewareProvider>
+            </MiddlewareProvider>
+        </ReactRouter>
     );
 };
